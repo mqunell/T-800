@@ -15,6 +15,11 @@ async def on_message(message):
         msg = "Prepare to be terminated, {0.author.mention}".format(message)
         await client.send_message(message.channel, msg)
 
+    # If the bot sees "fake news"
+    if "fake news" in message.content.lower():
+        msg = "*FAKE NEWS DETECTED. TERMINATING FAKE NEWS.*"
+        await client.send_message(message.channel, msg)
+
 @client.event
 async def on_ready():
     print("%s (ID: %s) logged in" % (client.user.name, client.user.id))
