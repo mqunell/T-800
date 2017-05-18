@@ -3,20 +3,21 @@ import discord
 client = discord.Client()
 
 @client.event
-async def on_message(message):  
-    # Per the discord.py docs this is to not have the bot respond to itself
+async def on_message(message):
+    # Prevent the bot from responding to itself
     if message.author == client.user:
         return
-    #If the bot sees the command !hello we will respond with our msg string
-    if message.content.startswith('!hello'):
-        msg = 'Prepare to be terminated, {0.author.mention}'.format(message)
+
+    # If the bot sees "!hello"
+    if message.content.startswith("!hello"):
+
+        # Print "Prepare to be terminated, <user>"
+        msg = "Prepare to be terminated, {0.author.mention}".format(message)
         await client.send_message(message.channel, msg)
 
 @client.event
-async def on_ready():  
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+async def on_ready():
+    print("%s (ID: %s) logged in" % (client.user.name, client.user.id))
+    print("----------------------------------------")
 
-client.run('') 
+client.run("XXXXX")
