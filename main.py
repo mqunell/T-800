@@ -8,7 +8,7 @@ async def on_message(message):
     if message.author != client.user:
 
         # If someone tags the bot
-        if client.user in message.mention:
+        if client.user in message.mentions:
             msg = "*TALK TO THE HAND, {0.author.mention}.*".format(message)
             await client.send_message(message.channel, msg)
 
