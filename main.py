@@ -17,9 +17,13 @@ async def on_message(message):
             msg = "*FAKE NEWS DETECTED. TERMINATING FAKE NEWS.*"
             await client.send_message(message.channel, msg)
 
+        # If someone calls "!purge"
+        if message.content.startswith("!purge"):
+            await client.purge_from(message.channel)
+
 @client.event
 async def on_ready():
     print("%s (ID: %s) logged in" % (client.user.name, client.user.id))
     print("----------------------------------------")
 
-client.run("XXXXX")
+client.run("X")
