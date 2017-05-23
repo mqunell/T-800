@@ -26,4 +26,11 @@ async def on_ready():
     print("%s (ID: %s) logged in" % (client.user.name, client.user.id))
     print("----------------------------------------")
 
+    # "general" chat channel id
+    general_id = "311344943111340033"
+
+    # Post a message when the bot comes online
+    msg = "*T-800 ONLINE. YOUR CLOTHES, GIVE THEM TO ME. NOW.*"
+    await client.send_message(client.get_channel(general_id), msg)
+
 client.run("X")
