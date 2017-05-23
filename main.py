@@ -33,4 +33,7 @@ async def on_ready():
     msg = "*T-800 ONLINE. YOUR CLOTHES, GIVE THEM TO ME. NOW.*"
     await client.send_message(client.get_channel(general_id), msg)
 
+    # Set the bot's "Playing" status
+    await client.change_presence(game=discord.Game(name="Human Simulator"))
+
 client.run("X")
