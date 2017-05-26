@@ -21,6 +21,26 @@ async def on_message(message):
         if message.content.startswith("!purge"):
             await client.purge_from(message.channel)
 
+        # If someone calls "!remindme"
+        if message.content.startswith("!remindme"):
+            command = message.content.split(" ")
+            error_msg = ""
+
+            if len(command) >= 3:
+                minutes = parse_minutes(command[1])
+
+                if 1 <= minutes <= 60:
+                    await client.send_message(message.channel, "Author: <{0.author.mention}>, ".format(message) + "Minutes: <%d>, Message: <%s>" % (minutes, " ".join(command[2:])))
+                else:
+                    error_msg = "Invalid <minutes>; must be [1, 60]"
+
+            else:
+                error_msg = "Invalid number of commmands"
+
+            if error_msg is not "":
+                await client.send_message(message.channel, "Error: %s" % error_msg)
+
+
 @client.event
 async def on_ready():
     print("%s (ID: %s) logged in" % (client.user.name, client.user.id))
@@ -36,4 +56,18 @@ async def on_ready():
     # Set the bot's "Playing" status
     await client.change_presence(game=discord.Game(name="Human Simulator"))
 
-client.run("X")
+
+def parse_minutes(str_input):
+    minutes = -1
+
+    try:
+        minutes = int(str_input)
+    except:
+        None
+
+    print("Returned minutes: %d" % minutes)
+    
+    return minutes
+
+
+client.run("")
