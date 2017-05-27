@@ -44,11 +44,32 @@ async def on_message(message):
 
         # If someone calls "!purge"
         if message.content.startswith("!purge"):
-            await client.purge_from(message.channel, limit=5)
+            await purge(message)
 
         # If someone calls "!remindme"
         if message.content.startswith("!remindme"):
             await remind_me(message)
+
+
+async def purge(message):
+    """
+    Splits a message into ["!purge", <num_messages>]
+    Remove <num_messages> most recent messages
+    """
+
+    command = message.content.split(" ")
+    error_msg = ""
+
+    # If valid number of args
+    if len(command) == 2:
+
+        # Attempt to parse <messages>
+        num_messages = parse_int(command[1])
+
+        # If valid <num_minutes>
+        if num_messages > 0:
+            num_messages += 1
+            await client.purge_from(message.channel, limit=num_messages)
 
 
 async def remind_me(message):
@@ -59,14 +80,13 @@ async def remind_me(message):
     """
 
     command = message.content.split(" ")
-
     error_msg = ""
 
     # If valid number of args
     if len(command) >= 3:
 
         # Attempt to parse <minutes>
-        minutes = parse_minutes(command[1])
+        minutes = parse_int(command[1])
 
         # If valid number of <minutes>
         if 1 <= minutes <= 60:
@@ -88,7 +108,7 @@ async def remind_me(message):
         await client.send_message(message.channel, "Error: %s" % error_msg)
 
 
-def parse_minutes(str_input):
+def parse_int(str_input):
     """
     Attempt to parse an int from a string
     """
