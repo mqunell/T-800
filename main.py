@@ -1,4 +1,5 @@
 import discord
+import asyncio
 
 client = discord.Client()
 
@@ -90,19 +91,21 @@ async def remind_me(message):
 
         # If valid number of <minutes>
         if 1 <= minutes <= 60:
+            # Create the messages (*'s for Discord italics)
+            author = "*{0.author.mention}".format(message)
+            confirmation = author + (": I WILL REMIND YOU OF THAT IN %d MINUTES.*" % minutes)
+            reminder = author + (": \"%s\"*" % " ".join(command[2:]))
 
-            # TESTING: Post the data to be timed
-            msg = "Author: <{0.author.mention}>, ".format(message)
-            msg += "Minutes: <%d>, " % minutes
-            msg += "Message: <%s>" % " ".join(command[2:])
-
-            await client.send_message(message.channel, msg)
+            # Post the confirmation immediately, and the reminder later
+            await client.send_message(message.channel, confirmation)
+            await asyncio.sleep(minutes * 60)
+            await client.send_message(message.channel, reminder)
 
         else:
             error_msg = "Invalid <minutes>; must be [1, 60]"
 
     else:
-        error_msg = "Invalid number of commmands"
+        error_msg = "Invalid number of commands"
 
     if error_msg is not "":
         await client.send_message(message.channel, "Error: %s" % error_msg)
