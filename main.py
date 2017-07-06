@@ -21,7 +21,7 @@ async def on_ready():
     await client.send_message(client.get_channel(channel_id), msg)
 
     # Set the bot's "Playing" status
-    await client.change_presence(game=discord.Game(name="Human Simulator"))
+    await client.change_presence(game=discord.Game(name="Type !help"))
 
 
 @client.event
@@ -43,6 +43,10 @@ async def on_message(message):
             msg = "*FAKE NEWS DETECTED. TERMINATING FAKE NEWS.*"
             await client.send_message(message.channel, msg)
 
+        # If someone calls "!help"
+        if message.content.startswith("!help"):
+            await help(message)
+
         # If someone calls "!purge"
         if message.content.startswith("!purge"):
             await purge(message)
@@ -50,6 +54,18 @@ async def on_message(message):
         # If someone calls "!remindme"
         if message.content.startswith("!remindme"):
             await remind_me(message)
+
+
+async def help(message):
+    """
+    Writes what the bot can do
+    """
+
+    msg = "*I AM A HIGHLY CAPABLE MACHINE. THESE ARE MY FUNCTIONS:*\n\n"
+    msg += "Reminders: `!remindme <minutes (1-60)> <message>`\n"
+    msg += "    Example: `!remindme 30 Make something for dinner`"
+
+    await client.send_message(message.channel, msg)
 
 
 async def purge(message):
@@ -111,6 +127,7 @@ async def remind_me(message):
         await client.send_message(message.channel, "Error: %s" % error_msg)
 
 
+# Helper function for remind_me(message)
 def parse_int(str_input):
     """
     Attempt to parse an int from a string
