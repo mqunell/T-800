@@ -127,10 +127,10 @@ async def remind_me(message):
         await client.send_message(message.channel, "Error: %s" % error_msg)
 
 
-# Helper function for remind_me(message)
 def parse_int(str_input):
     """
-    Attempt to parse an int from a string
+    Helper function for remind_me(message)
+    Attempts to parse an int from a string
     """
 
     minutes = -1
