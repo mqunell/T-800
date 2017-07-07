@@ -1,5 +1,7 @@
+import sys
 import discord
 import asyncio
+
 
 client = discord.Client()
 
@@ -143,4 +145,5 @@ def parse_int(str_input):
     return minutes
 
 
-client.run("")
+token = sys.argv[1]
+client.run(token)
