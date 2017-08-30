@@ -16,7 +16,7 @@ async def on_ready():
     print("----------------------------------------")
 
     # "bot-testing" chat channel id
-    channel_id = "342540007560577036"
+    channel_id = "352531997262086144"
 
     # Post a message when the bot comes online
     msg = "*T-800 ONLINE. YOUR CLOTHES, GIVE THEM TO ME. NOW.*"
