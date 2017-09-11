@@ -87,22 +87,13 @@ async def purge(message):
 
         # If valid <num_messages>
         if num_messages > 0:
-            num_messages_backup = num_messages
 
             # Add 1 to account for the "!purge <num_messages" call
-            num_messages += 1
-
-            # Attempt to remove <num_messages> messages, decrementing as necessary
-            while (num_messages >= 0):
-                try:
-                    await client.purge_from(message.channel, limit=num_messages)
-                    break # Remove this break to somehow bypass the time limit and wipe a text channel
-                except:
-                    num_messages -= 1
+            await client.purge_from(message.channel, limit=(num_messages+1))
 
             # Post a results message
             # (Doesn't work properly if there are less valid messages to remove than <num_messages>)
-            results_message = "*%d / %d MESSAGES REMOVED.*" % (num_messages - 1, num_messages_backup)
+            results_message = "*%d MESSAGES REMOVED.*" % (num_messages)
             await client.send_message(message.channel, results_message)
 
 
