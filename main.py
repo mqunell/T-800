@@ -45,6 +45,11 @@ async def on_message(message):
             msg = "*FAKE NEWS DETECTED. TERMINATING FAKE NEWS.*"
             await client.send_message(message.channel, msg)
 
+        # If someone posts in all caps
+        if message.content == message.content.upper():
+            msg = "*POSSIBLE RAGE DETECTED. ENSURE THAT YOU ARE CALM, OR RISK TERMINATION.*"
+            await client.send_message(message.channel, msg)
+
         # If someone calls "!help"
         if message.content.startswith("!help"):
             await help(message)
