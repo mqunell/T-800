@@ -73,11 +73,10 @@ async def help(message):
 async def purge(message):
     """
     Splits a message into ["!purge", <num_messages>]
-    Remove <num_messages> most recent messages
+    Remove up to <num_messages> most recent messages
     """
 
     command = message.content.split(" ")
-    error_msg = ""
 
     # If valid number of args
     if len(command) == 2:
@@ -88,12 +87,12 @@ async def purge(message):
         # If valid <num_messages>
         if num_messages > 0:
 
-            # Add 1 to account for the "!purge <num_messages" call
-            await client.purge_from(message.channel, limit=(num_messages+1))
+            # Remove (<num_messages> + 1) messages, which accounts for the command
+            removed_messages = await client.purge_from(message.channel, limit=(num_messages + 1))
 
             # Post a results message
-            # (Doesn't work properly if there are less valid messages to remove than <num_messages>)
-            results_message = "*%d MESSAGES REMOVED.*" % (num_messages)
+            num_removed = len(removed_messages) - 1
+            results_message = "*%d MESSAGE%s REMOVED.*" % (num_removed, "S" if num_removed > 1 else "")
             await client.send_message(message.channel, results_message)
 
 
