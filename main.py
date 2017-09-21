@@ -42,7 +42,9 @@ async def on_message(message):
 
         # If someone says "fake news"
         if "fake news" in message.content.lower():
-            msg = "*FAKE NEWS DETECTED. TERMINATING FAKE NEWS.*"
+            author = "*{0.author.mention}".format(message)
+            msg = "%s said \"%s\"*\n" % (author, message.content)
+            msg += "*FAKE NEWS DETECTED. TERMINATING FAKE NEWS.*"
             await client.send_message(message.channel, msg)
 
         # If someone calls "!help"
