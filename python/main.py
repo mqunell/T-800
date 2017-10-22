@@ -1,4 +1,3 @@
-import sys
 import discord
 import asyncio
 
@@ -152,5 +151,11 @@ def parse_int(str_input):
     return minutes
 
 
-token = sys.argv[1]
+# Get the token
+tokenFile = open("../other/token.txt", "r")
+token = tokenFile.read()
+tokenFile.close()
+
+
+# Run the bot
 client.run(token)
