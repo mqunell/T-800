@@ -1,70 +1,94 @@
 import requests
 
 
-wow_key = ""
-hearthstone_key = ""
+class WebsiteApis:
 
-wow_classes = ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight",
-               "Shaman", "Mage", "Warlock", "Monk", "Druid", "Demon Hunter"]
+    wow_key = ""
+    hearthstone_key = ""
 
-
-# World of Warcraft average item level
-def wow_item_level(character, server):
-
-    # Format the input
-    character = character.title()
-    server = server.title()
-
-    # Web address
-    fields = "items&"  # Change for different fields
-    url = "https://us.api.battle.net/wow/character/%s/%s?fields=%slocale=en_US&apikey=%s" \
-          % (server, character, fields, wow_key)
-
-    # Retrieve the data
-    data = requests.get(url).json()
-
-    # Check its validity - "status" key is only in invalid data
-    if "status" not in data:
-        # Parse the class and average item level
-        class_num = int(data['class']) - 1
-        average_item_level = data['items']['averageItemLevel']
-
-        # Output
-        print("%s-%s" % (character, server))
-        print("Class: %s" % wow_classes[class_num])
-        print("Average item level: %d" % average_item_level)
-
-    else:
-        print("Invalid character name and/or server")
+    wow_classes = ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight",
+                   "Shaman", "Mage", "Warlock", "Monk", "Druid", "Demon Hunter"]
 
 
-# Hearthstone card
-def hearthstone_card(card):
+    def __init__(self):
+        key_file = open("../other/api_keys", "r")
+        lines = key_file.read().split("\n")
+        key_file.close()
 
-    # Web address
-    url = "https://omgvamp-hearthstone-v1.p.mashape.com/cards/search/%s" % card
+        keys = {}
 
-    # Create a request, attach the key
-    request = requests.Session()
-    request.headers.update({"X-Mashape-Key": hearthstone_key})
+        for line in lines:
+            keys[line[0:line.index(',')]] = line[line.index(',') + 1:]
 
-    # Get, parse, and print the information
-    data = request.get(url).json()
+        self.wow_key = keys["wow"]
+        self.hearthstone_key = keys["hearthstone"]
 
-    # Check its validity - "error" key is only in invalid data
-    if "error" not in data:
 
-        # Post the first image link
-        for d in data:
-            if "img" in d:
-                print(d["img"])
-                break
+    # World of Warcraft average item level
+    def wow_item_level(self, character, server):
 
-    else:
+        # Format the input
+        character = character.title()
+        server = server.title()
 
-        # Card not found error
-        if data["error"] == 404:
-            print("Card not found.")
+        # Web address
+        fields = "items&"  # Change for different fields
+        url = "https://us.api.battle.net/wow/character/%s/%s?fields=%slocale=en_US&apikey=%s" \
+              % (server, character, fields, self.wow_key)
+
+        # Retrieve the data
+        data = requests.get(url).json()
+
+        output = ""
+
+        # Check its validity - "status" key is only in invalid data
+        if "status" not in data:
+            # Parse the class and average item level
+            class_num = int(data['class']) - 1
+            average_item_level = data['items']['averageItemLevel']
+
+            # Output
+            output += "%s-%s\n" % (character, server)
+            output += "Class: %s\n" % self.wow_classes[class_num]
+            output += "Average item level: %d" % average_item_level
 
         else:
-            print("Error code 2")
+            output += "Invalid character name and/or server"
+
+        return output
+
+
+    # Hearthstone card
+    def hearthstone_card(self, card):
+
+        # Web address
+        url = "https://omgvamp-hearthstone-v1.p.mashape.com/cards/search/%s" % card
+
+        # Create a request, attach the key
+        request = requests.Session()
+        request.headers.update({"X-Mashape-Key": self.hearthstone_key})
+
+        # Get, parse, and print the information
+        data = request.get(url).json()
+
+        output = ""
+
+        # Check its validity - "error" key is only in invalid data
+        if "error" not in data:
+
+            # Post the first image link
+            for d in data:
+                if "img" in d:
+                    output = d["img"]
+                    break
+
+        else:
+
+            # Card not found error
+            if data["error"] == 404:
+                output = "Card not found."
+
+            else:
+                output = "Error code 2"
+
+        return output

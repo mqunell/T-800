@@ -1,8 +1,10 @@
 import discord
 import asyncio
+import website_apis
 
 
 client = discord.Client()
+apis = website_apis.WebsiteApis()
 
 
 @client.event
@@ -58,6 +60,14 @@ async def on_message(message):
         if message.content.startswith("!remindme"):
             await remind_me(message)
 
+        # If someone calls "/ilevel" or "/ilvl"
+        if message.content.startswith("/ilevel") or message.content.startswith("/ilvl"):
+            await wow_ilevel(message)
+
+        # If someone calls "/card" or "/hs"
+        if message.content.startswith("/card") or message.content.startswith("/hs"):
+            await hearthstone_card(message)
+
 
 async def help(message):
     """
@@ -108,7 +118,7 @@ async def purge(message):
                 error_msg = "Invalid <num_messages>; must be [1, 100]"
 
         else:
-            error_msg = "Invalid number of commands"
+            error_msg = "Invalid number of arguments"
 
         # Post an error message, if necessary
         if error_msg is not "":
@@ -147,11 +157,47 @@ async def remind_me(message):
             error_msg = "Invalid <minutes>; must be [1, 60]"
 
     else:
-        error_msg = "Invalid number of commands"
+        error_msg = "Invalid number of arguments"
 
     # Post an error message, if necessary
     if error_msg is not "":
         await client.send_message(message.channel, "Error: %s" % error_msg)
+
+
+async def wow_ilevel(message):
+    """
+    Splits a message into ["/ilevel", <character>, <server>]
+    Calls website_apis.wow_item_level() for the API call and information
+    """
+
+    command = message.content.split(" ")
+
+    # If valid number of args
+    if len(command) == 3:
+
+        # Make the API call, which handles invalid input
+        await client.send_message(message.channel, apis.wow_item_level(command[1], command[2]))
+
+    else:
+        await client.send_message(message.channel, "Error: Invalid number of arguments")
+
+
+async def hearthstone_card(message):
+    """
+    Splits a message into ["/card", <card>]
+    """
+
+    command = message.content.split(" ")
+    output = ""
+
+    # If valid number of args
+    if len(command) >= 2:
+
+        # Make the API call, which handles invalid input
+        await client.send_message(message.channel, apis.hearthstone_card(" ".join(command[1:])))
+
+    else:
+        await client.send_message(message.channel, "Error: Invalid number of arguments")
 
 
 def parse_int(str_input):
@@ -170,7 +216,7 @@ def parse_int(str_input):
 
 
 # Get the token and run the bot
-token_file = open("../other/token.txt", "r")
+token_file = open("../other/discord_token", "r")
 token = token_file.read()
 token_file.close()
 
