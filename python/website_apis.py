@@ -47,6 +47,9 @@ class WebsiteApis:
             class_num = int(data['class']) - 1
             average_item_level = data['items']['averageItemLevel']
 
+            # Remove the "-" from a server name for displaying
+            server = server.replace("-", " ")
+
             # Output
             output += "%s-%s\n" % (character, server)
             output += "Class: %s\n" % self.wow_classes[class_num]
