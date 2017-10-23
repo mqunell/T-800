@@ -170,8 +170,8 @@ def parse_int(str_input):
 
 
 # Get the token and run the bot
-tokenFile = open("../other/token.txt", "r")
-token = tokenFile.read()
-tokenFile.close()
+token_file = open("../other/token.txt", "r")
+token = token_file.read()
+token_file.close()
 
 client.run(token)
