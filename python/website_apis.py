@@ -81,7 +81,7 @@ class WebsiteApis:
 
             # Post the first image link
             for d in data:
-                if "img" in d:
+                if "img" in d and "collectible" in d:
                     output = d["img"]
                     break
 
