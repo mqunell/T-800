@@ -77,24 +77,42 @@ async def purge(message):
     Remove up to <num_messages> most recent messages
     """
 
-    command = message.content.split(" ")
+    if str(message.author) == "Maios#6282":
 
-    # If valid number of args
-    if len(command) == 2:
+        command = message.content.split(" ")
+        error_msg = ""
 
-        # Attempt to parse <num_messages>
-        num_messages = parse_int(command[1])
+        # If valid number of args
+        if len(command) == 2:
 
-        # If valid <num_messages>
-        if num_messages > 0:
+            # Attempt to parse <num_messages>
+            num_messages = parse_int(command[1])
 
-            # Remove (<num_messages> + 1) messages, which accounts for the command
-            removed_messages = await client.purge_from(message.channel, limit=(num_messages + 1))
+            # If valid <num_messages>
+            if num_messages > 0:
 
-            # Post a results message
-            num_removed = len(removed_messages) - 1
-            results_message = "*%d MESSAGE%s REMOVED.*" % (num_removed, "S" if num_removed > 1 else "")
-            await client.send_message(message.channel, results_message)
+                # Attempt to remove <num_messages> messages
+                try:
+                    # Remove (<num_messages> + 1) messages, which accounts for the command
+                    removed_messages = await client.purge_from(message.channel, limit=(num_messages + 1))
+
+                    # Post a results message
+                    num_removed = len(removed_messages) - 1
+                    results_message = "*%d MESSAGE%s REMOVED.*" % (num_removed, "S" if num_removed > 1 else "")
+                    await client.send_message(message.channel, results_message)
+
+                except:
+                    await client.send_message(message.channel, "Invalid <num_messages>; some may be too old")
+
+            else:
+                error_msg = "Invalid <num_messages>; must be [1, 100]"
+
+        else:
+            error_msg = "Invalid number of commands"
+
+        # Post an error message, if necessary
+        if error_msg is not "":
+            await client.send_message(message.channel, "Error: %s" % error_msg)
 
 
 async def remind_me(message):
@@ -131,14 +149,14 @@ async def remind_me(message):
     else:
         error_msg = "Invalid number of commands"
 
+    # Post an error message, if necessary
     if error_msg is not "":
         await client.send_message(message.channel, "Error: %s" % error_msg)
 
 
 def parse_int(str_input):
     """
-    Helper function for remind_me(message)
-    Attempts to parse an int from a string
+    Helper function that attempts to parse an int from a string
     """
 
     minutes = -1
@@ -151,11 +169,9 @@ def parse_int(str_input):
     return minutes
 
 
-# Get the token
+# Get the token and run the bot
 tokenFile = open("../other/token.txt", "r")
 token = tokenFile.read()
 tokenFile.close()
 
-
-# Run the bot
 client.run(token)
