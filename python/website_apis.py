@@ -6,6 +6,10 @@ class WebsiteApis:
     wow_key = ""
     hearthstone_key = ""
 
+    # Worgen: 22, APanda: 25, HPanda: 26
+    wow_races = ["Human", "Orc", "Dwarf", "Night Elf", "Undead", "Tauren",
+                 "Gnome", "Troll", "Goblin", "Blood Elf", "Draenei"]
+
     wow_classes = ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight",
                    "Shaman", "Mage", "Warlock", "Monk", "Druid", "Demon Hunter"]
 
@@ -43,17 +47,37 @@ class WebsiteApis:
 
         # Check its validity - "status" key is only in invalid data
         if "status" not in data:
-            # Parse the class and average item level
-            class_num = int(data['class']) - 1
-            average_item_level = data['items']['averageItemLevel']
+
+            # Level
+            character_level = int(data['level'])
+
+            # Race (some values had to be hardcoded)
+            race_num = int(data['race'])
+            character_race = ""
+            if race_num <= 12:
+                character_race = self.wow_races[race_num - 1]
+            else:
+                if race_num == 22:
+                    character_race = "Worgen"
+                elif race_num == 25:
+                    character_race = "A. Panda"
+                elif race_num == 26:
+                    character_race = "H. Panda"
+
+            # Class
+            class_num = int(data['class'])
+            character_class = self.wow_classes[class_num - 1]
+
+            # Average item level
+            character_ilevel = data['items']['averageItemLevel']
 
             # Remove the "-" from a server name for displaying
             server = server.replace("-", " ")
 
             # Output
             output += "%s-%s\n" % (character, server)
-            output += "Class: %s\n" % self.wow_classes[class_num]
-            output += "Average item level: %d" % average_item_level
+            output += "%d %s %s\n" % (character_level, character_race, character_class)
+            output += "Average item level: %d" % character_ilevel
 
         else:
             output += "Invalid character name and/or server"
