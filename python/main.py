@@ -1,10 +1,13 @@
 import discord
 import asyncio
-import website_apis
+import wow_apis
+import hearthstone_apis
 
 
 client = discord.Client()
-apis = website_apis.WebsiteApis()
+
+wow_api = wow_apis.WowApi()
+hearthstone_api = hearthstone_apis.HearthstoneApi()
 
 
 @client.event
@@ -16,8 +19,10 @@ async def on_ready():
     print("%s (ID: %s) logged in" % (client.user.name, client.user.id))
     print("----------------------------------------")
 
-    # "bot-testing" chat channel id
-    channel_id = "352531997262086144"
+    # "bot_testing" chat channel id
+    id_file = open("../secret/channel_id", "r")
+    channel_id = id_file.read()
+    id_file.close()
 
     # Post a message when the bot comes online
     msg = "*T-800 ONLINE. YOUR CLOTHES, GIVE THEM TO ME. NOW.*"
@@ -176,7 +181,7 @@ async def wow_ilevel(message):
     if len(command) == 3:
 
         # Make the API call, which handles invalid input
-        await client.send_message(message.channel, apis.wow_item_level(command[1], command[2]))
+        await client.send_message(message.channel, wow_api.wow_item_level(command[1], command[2]))
 
     else:
         await client.send_message(message.channel, "Error: Invalid number of arguments")
@@ -194,7 +199,7 @@ async def hearthstone_card(message):
     if len(command) >= 2:
 
         # Make the API call, which handles invalid input
-        await client.send_message(message.channel, apis.hearthstone_card(" ".join(command[1:])))
+        await client.send_message(message.channel, hearthstone_api.hearthstone_card(" ".join(command[1:])))
 
     else:
         await client.send_message(message.channel, "Error: Invalid number of arguments")
@@ -216,8 +221,8 @@ def parse_int(str_input):
 
 
 # Get the token and run the bot
-token_file = open("../other/discord_token", "r")
-token = token_file.read()
+token_file = open("../secret/discord_token", "r")
+discord_token = token_file.read()
 token_file.close()
 
-client.run(token)
+client.run(discord_token)
