@@ -10,7 +10,7 @@ class HearthstoneApi:
 
         # Parse the API key
         key_file = open("../secret/hearthstone_key", "r")
-        self.api_key = key_file.read()
+        self.api_key = key_file.read().strip()
         key_file.close()
 
 

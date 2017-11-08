@@ -16,7 +16,7 @@ class WowApi:
 
         # Parse the API key
         key_file = open("../secret/wow_key", "r")
-        self.api_key = key_file.read()
+        self.api_key = key_file.read().strip()
         key_file.close()
 
 

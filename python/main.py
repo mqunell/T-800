@@ -21,7 +21,7 @@ async def on_ready():
 
     # "bot_testing" chat channel id
     id_file = open("../secret/channel_id", "r")
-    channel_id = id_file.read()
+    channel_id = id_file.read().strip()
     id_file.close()
 
     # Post a message when the bot comes online
@@ -235,7 +235,7 @@ def parse_int(str_input):
 
 # Get the token and run the bot
 token_file = open("../secret/discord_token", "r")
-discord_token = token_file.read()
+discord_token = token_file.read().strip()
 token_file.close()
 
 client.run(discord_token)
