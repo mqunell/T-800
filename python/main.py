@@ -48,10 +48,8 @@ async def on_message(message):
 
         # If someone says "fake news"
         if "fake news" in message.content.lower():
-            author = "*{0.author.mention}".format(message)
-            msg = "%s said \"%s\"*\n" % (author, message.content)
-            msg += "*FAKE NEWS DETECTED. TERMINATING FAKE NEWS.*"
-            await client.send_message(message.channel, msg)
+            fake_news_emoji = discord.Emoji(name="fakenews", id="377290554909917186", server=message.server)
+            await client.add_reaction(message, fake_news_emoji)
 
         # If someone calls "/help"
         if message.content.startswith("/help"):
