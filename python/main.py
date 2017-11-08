@@ -29,7 +29,7 @@ async def on_ready():
     await client.send_message(client.get_channel(channel_id), msg)
 
     # Set the bot's "Playing" status
-    await client.change_presence(game=discord.Game(name="Type !help"))
+    await client.change_presence(game=discord.Game(name="Type /help"))
 
 
 @client.event
@@ -53,16 +53,16 @@ async def on_message(message):
             msg += "*FAKE NEWS DETECTED. TERMINATING FAKE NEWS.*"
             await client.send_message(message.channel, msg)
 
-        # If someone calls "!help"
-        if message.content.startswith("!help"):
+        # If someone calls "/help"
+        if message.content.startswith("/help"):
             await help(message)
 
-        # If someone calls "!purge"
-        if message.content.startswith("!purge"):
+        # If someone calls "/purge"
+        if message.content.startswith("/purge"):
             await purge(message)
 
-        # If someone calls "!remindme"
-        if message.content.startswith("!remindme"):
+        # If someone calls "/remindme"
+        if message.content.startswith("/remindme"):
             await remind_me(message)
 
         # If someone calls "/ilevel" or "/ilvl"
@@ -80,15 +80,30 @@ async def help(message):
     """
 
     msg = "*I AM A HIGHLY CAPABLE MACHINE. THESE ARE MY FUNCTIONS:*\n\n"
-    msg += "Reminders: `!remindme <minutes (1-60)> <message>`\n"
-    msg += "    Example: `!remindme 30 Make something for dinner`"
+
+    msg += "Reminders\n```"
+    msg += "Command: /remindme <minutes (1-60)> <message>\n"
+    msg += "Example: /remindme 30 Make something for dinner\n"
+    msg += "```\n"
+
+    msg += "WoW item levels\n```"
+    msg += "Command: /ilevel <character name> <server>\n"
+    msg += "Shorter: /ilvl ...\n"
+    msg += "Example: /ilevel Matchi Shadowsong\n"
+    msg += "```\n"
+
+    msg += "Hearthstone cards\n```"
+    msg += "Command: /hearthstone <card name>\n"
+    msg += "Shorter: /card ...\n"
+    msg += "Example: /hearthstone Illidan\n"
+    msg += "```"
 
     await client.send_message(message.channel, msg)
 
 
 async def purge(message):
     """
-    Splits a message into ["!purge", <num_messages>]
+    Splits a message into ["/purge", <num_messages>]
     Remove up to <num_messages> most recent messages
     """
 
@@ -132,7 +147,7 @@ async def purge(message):
 
 async def remind_me(message):
     """
-    Splits a message into ["!remindme", <minutes>, <message>]
+    Splits a message into ["/remindme", <minutes>, <message>]
     After <minutes>, mention the author and post <message>
     Note: <message> could be multiple strings, so join() is used
     """
