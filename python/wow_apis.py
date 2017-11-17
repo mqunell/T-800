@@ -1,7 +1,7 @@
 import requests
 
 
-class WowApi:
+class WowApis:
 
     api_key = ""
 
@@ -21,7 +21,7 @@ class WowApi:
 
 
     # World of Warcraft average item level
-    def wow_item_level(self, character, server):
+    def ilevel(self, character, server):
 
         # Format the input
         character = character.title()

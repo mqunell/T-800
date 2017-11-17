@@ -1,7 +1,7 @@
 import requests
 
 
-class HearthstoneApi:
+class HearthstoneApis:
 
     api_key = ""
 
@@ -15,7 +15,7 @@ class HearthstoneApi:
 
 
     # Hearthstone card
-    def hearthstone_card(self, card):
+    def card(self, card):
 
         # Web address
         url = "https://omgvamp-hearthstone-v1.p.mashape.com/cards/search/%s" % card

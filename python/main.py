@@ -1,13 +1,13 @@
 import discord
 import asyncio
-import wow_apis
-import hearthstone_apis
+import python.wow_apis
+import python.hearthstone_apis
 
 
 client = discord.Client()
 
-wow_api = wow_apis.WowApi()
-hearthstone_api = hearthstone_apis.HearthstoneApi()
+wow = python.wow_apis.WowApis()
+hs = python.hearthstone_apis.HearthstoneApis()
 
 
 @client.event
@@ -19,7 +19,7 @@ async def on_ready():
     print("%s (ID: %s) logged in" % (client.user.name, client.user.id))
     print("----------------------------------------")
 
-    # "bot_testing" chat channel id
+    # Get the "bot_testing" chat channel id
     id_file = open("../secret/channel_id", "r")
     channel_id = id_file.read().strip()
     id_file.close()
@@ -194,7 +194,7 @@ async def wow_ilevel(message):
     if len(command) == 3:
 
         # Make the API call, which handles invalid input
-        await client.send_message(message.channel, wow_api.wow_item_level(command[1], command[2]))
+        await client.send_message(message.channel, wow.ilevel(command[1], command[2]))
 
     else:
         await client.send_message(message.channel, "Error: Invalid number of arguments")
@@ -212,7 +212,7 @@ async def hearthstone_card(message):
     if len(command) >= 2:
 
         # Make the API call, which handles invalid input
-        await client.send_message(message.channel, hearthstone_api.hearthstone_card(" ".join(command[1:])))
+        await client.send_message(message.channel, hs.card(" ".join(command[1:])))
 
     else:
         await client.send_message(message.channel, "Error: Invalid number of arguments")
