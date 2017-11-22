@@ -107,7 +107,8 @@ async def purge(message):
     Remove up to <num_messages> most recent messages
     """
 
-    if str(message.author) == "Maios#6282":
+    # If the author is an administrator
+    if message.channel.permissions_for(message.author).administrator:
 
         command = message.content.split(" ")
         error_msg = ""
