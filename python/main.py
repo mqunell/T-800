@@ -67,7 +67,11 @@ async def on_message(message):
 
         # If someone calls "/ilevel" or "/ilvl"
         if message.content.startswith("/ilevel") or message.content.startswith("/ilvl"):
-            await wow_ilevel(message)
+            await wow_item_level(message)
+
+        # If someone calls "/mplus"
+        if message.content.startswith("/mplus"):
+            await wow_mythic_plus(message)
 
         # If someone calls "/card" or "/hs"
         if message.content.startswith("/card") or message.content.startswith("/hs"):
@@ -90,6 +94,11 @@ async def help(message):
     msg += "Command: /ilevel <character name> <server>\n"
     msg += "Shorter: /ilvl ...\n"
     msg += "Example: /ilevel Matchi Shadowsong\n"
+    msg += "```\n"
+
+    msg += "WoW Mythic Plus\n```"
+    msg += "Command: /mplus <character name> <server>\n"
+    msg += "Example: /mplus Matchi Shadowsong\n"
     msg += "```\n"
 
     msg += "Hearthstone cards\n```"
@@ -186,10 +195,10 @@ async def remind_me(message):
         await client.send_message(message.channel, "Error: %s" % error_msg)
 
 
-async def wow_ilevel(message):
+async def wow_item_level(message):
     """
     Splits a message into ["/ilevel", <character>, <server>]
-    Calls website_apis.wow_item_level() for the API call and information
+    Calls WowApis.item_level() for the API call and results
     """
 
     command = message.content.split(" ")
@@ -198,7 +207,25 @@ async def wow_ilevel(message):
     if len(command) == 3:
 
         # Make the API call, which handles invalid input
-        await client.send_message(message.channel, wow.ilevel(command[1], command[2]))
+        await client.send_message(message.channel, wow.item_level(command[1], command[2]))
+
+    else:
+        await client.send_message(message.channel, "Error: Invalid number of arguments")
+
+
+async def wow_mythic_plus(message):
+    """
+    Splits a message into ["/mplus", <character>, <server>]
+    Calls WowApis.mythic_plus() for the API call and results
+    """
+
+    command = message.content.split(" ")
+
+    # If valid number of args
+    if len(command) == 3:
+
+        # Make the API call, which handles invalid input
+        await client.send_message(message.channel, wow.mythic_plus(command[1], command[2]))
 
     else:
         await client.send_message(message.channel, "Error: Invalid number of arguments")
@@ -207,6 +234,7 @@ async def wow_ilevel(message):
 async def hearthstone_card(message):
     """
     Splits a message into ["/card", <card>]
+    Calls HearthstoneApis.card() for the API call and results
     """
 
     command = message.content.split(" ")

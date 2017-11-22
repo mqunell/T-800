@@ -21,24 +21,23 @@ class WowApis:
 
 
     # World of Warcraft average item level
-    def ilevel(self, character, server):
-
-        # Format the input
-        character = character.title()
-        server = server.title()
+    def item_level(self, character, server):
 
         # Web address
         fields = "items&"  # Change for different fields
         url = "https://us.api.battle.net/wow/character/%s/%s?fields=%slocale=en_US&apikey=%s" \
               % (server, character, fields, self.api_key)
 
-        # Retrieve the data
-        data = requests.get(url).json()
+        # Make the request
+        r = requests.get(url)
 
         output = ""
 
-        # Check its validity - "status" key is only in invalid data
-        if "status" not in data:
+        # If the request is successful
+        if r.status_code == 200:
+
+            # Retrieve the data
+            data = r.json()
 
             # Level
             character_level = int(data['level'])
@@ -58,11 +57,55 @@ class WowApis:
             server = server.replace("-", " ")
 
             # Output
-            output += "%s-%s\n" % (character, server)
+            output += "%s-%s\n" % (character.title(), server.title())
             output += "%d %s %s\n" % (character_level, character_race, character_class)
             output += "Average item level: %d" % character_ilevel
 
         else:
             output += "Invalid character name and/or server"
+
+        return output
+
+
+    # Mythic Plus info
+    def mythic_plus(self, character, server):
+
+        # Web address
+        url = "https://raider.io/api/v1/characters/profile?region=us&realm=%s&name=%s" % (server, character)
+        url += "&fields=mythic_plus_scores%2Cmythic_plus_weekly_highest_level_runs"
+
+        # Make the request
+        r = requests.get(url)
+
+        output = ""
+
+        # If the request is successful
+        if r.status_code == 200:
+
+            # Retrieve the data
+            data = r.json()
+
+            # Name
+            name = data["name"]
+
+            # Profile URL
+            profile_url = data["profile_url"]
+
+            # Overall M+ score
+            overall_score = data["mythic_plus_scores"]["all"]
+
+            # Attempt to find the highest completed in the last week
+            highest = "-"
+            if len(data["mythic_plus_weekly_highest_level_runs"]) > 0:
+                highest = "%s %d" % (data["mythic_plus_weekly_highest_level_runs"][0]["dungeon"],
+                                     data["mythic_plus_weekly_highest_level_runs"][0]["mythic_level"])
+
+            output += "%s-%s\n" % (character.title(), server.title())
+            output += "Overall Mythic Plus score: %s\n" % overall_score
+            output += "Highest Mythic Plus this week: %s\n" % highest
+            output += "Raider.IO profile: <%s>\n" % profile_url
+
+        else:
+            output = "Could not find character"
 
         return output
