@@ -1,13 +1,15 @@
 import discord
 import asyncio
-import python.wow_apis
-import python.hearthstone_apis
+from wow_apis import WowApis
+from hearthstone_apis import HearthstoneApis
 
 
+# Create the bot client
 client = discord.Client()
 
-wow = python.wow_apis.WowApis()
-hs = python.hearthstone_apis.HearthstoneApis()
+# Create the API objects
+wow = WowApis()
+hs = HearthstoneApis()
 
 
 @client.event
