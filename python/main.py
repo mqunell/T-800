@@ -166,7 +166,8 @@ async def remind_me(message):
         if 1 <= minutes <= 60:
             # Create the messages (*'s for Discord italics)
             author = "*{0.author.mention}".format(message)
-            confirmation = author + (": I WILL REMIND YOU OF THAT IN %d MINUTES.*" % minutes)
+            confirmation = author + (": I WILL REMIND YOU OF THAT IN %d MINUTE%s.*" % (minutes,
+                                                                                       "S" if minutes > 1 else ""))
             reminder = author + (": \"%s\"*" % " ".join(command[2:]))
 
             # Post the confirmation immediately, and the reminder later
