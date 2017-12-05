@@ -1,5 +1,7 @@
 import discord
 import asyncio
+import weekday_timers
+from weekday import Weekday
 from wow_apis import WowApis
 from hearthstone_apis import HearthstoneApis
 
@@ -32,6 +34,9 @@ async def on_ready():
 
     # Set the bot's "Playing" status
     await client.change_presence(game=discord.Game(name="Type /help"))
+
+    # Start the Wednesday "timer"
+    await post_wednesday()
 
 
 @client.event
@@ -106,6 +111,16 @@ async def help(message):
     msg += "```"
 
     await client.send_message(message.channel, msg)
+
+
+async def post_wednesday():
+    wait_time = weekday_timers.time_until(Weekday.WEDNESDAY)
+    await asyncio.sleep(wait_time)
+
+    await client.send_message(client.get_channel("373164195283337218"),
+                              "http://i1.kym-cdn.com/photos/images/newsfeed/001/091/264/665.jpg")
+
+    await post_wednesday()
 
 
 async def purge(message):
