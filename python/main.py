@@ -97,24 +97,24 @@ async def help(message):
     Writes what the bot can do
     """
 
-    msg = "*I AM A HIGHLY CAPABLE MACHINE. THESE ARE MY FUNCTIONS:*\n\n"
+    msg = "*I AM A HIGHLY CAPABLE MACHINE. THESE ARE MY COMMANDS:*\n\n"
 
     msg += "Reminders\n```"
-    msg += "Command: /remindme <minutes (1-60)> <message>\n"
-    msg += "Example: /remindme 30 Make something for dinner\n"
+    msg += "/remindme <minutes (1-60)> <message>\n"
     msg += "```\n"
 
     msg += "World of Warcraft\n```"
-    msg += "/ilevel <character name> <server>    (Alt: /ilvl)\n"
-    msg += "/mplus  <character name> <server>\n"
-    msg += "/wow    <character name> <server>    (Combination of /ilevel and /mplus)\n"
-    msg += "/affixes"
+    msg += "/ilevel <character_name> <server>    (/ilvl ...)\n"
+    msg += "/mplus  <character_name> <server>\n"
+    msg += "/wow    <character_name> <server>\n"
+    msg += "/affixes\n"
     msg += "```\n"
 
     msg += "Hearthstone\n```"
-    msg += "Command: /hearthstone <card name>    (Alt: /card)\n"
-    msg += "Example: /hearthstone Illidan\n"
-    msg += "```"
+    msg += "/card <card_name>    (/hs ...)\n"
+    msg += "```\n"
+
+    msg += "\n*MORE INFORMATION: <https://github.com/mqunell/T-800/blob/master/README.md>*"
 
     await client.send_message(message.channel, msg)
 
