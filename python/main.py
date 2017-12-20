@@ -82,6 +82,11 @@ async def on_message(message):
         if message.content.startswith("/wow"):
             await parse_wow(message, wow.all)
 
+        # If someone calls "/affixes"
+        if message.content.startswith("/affixes"):
+            msg = wow.affixes()
+            await client.send_message(message.channel, msg)
+
         # If someone calls "/card" or "/hs"
         if message.content.startswith("/card") or message.content.startswith("/hs"):
             await hearthstone_card(message)
@@ -99,13 +104,14 @@ async def help(message):
     msg += "Example: /remindme 30 Make something for dinner\n"
     msg += "```\n"
 
-    msg += "WoW commands\n```"
+    msg += "World of Warcraft\n```"
     msg += "/ilevel <character name> <server>    (Alt: /ilvl)\n"
     msg += "/mplus  <character name> <server>\n"
-    msg += "/wow    <character name> <server>    (Combination of /ilevel and /mplus)"
+    msg += "/wow    <character name> <server>    (Combination of /ilevel and /mplus)\n"
+    msg += "/affixes"
     msg += "```\n"
 
-    msg += "Hearthstone cards\n```"
+    msg += "Hearthstone\n```"
     msg += "Command: /hearthstone <card name>    (Alt: /card)\n"
     msg += "Example: /hearthstone Illidan\n"
     msg += "```"

@@ -3,8 +3,6 @@ import requests
 
 class WowApis:
 
-    api_key = ""
-
     # Dictionaries for parsing in item_level()
     wow_races = {1: "Human", 2: "Orc", 3: "Dwarf", 4: "Night Elf", 5: "Undead", 6: "Tauren", 7: "Gnome", 8: "Troll",
                  9: "Goblin", 10: "Blood Elf", 11: "Draenei", 22: "Worgen", 25: "A. Panda", 26: "H. Panda"}
@@ -27,7 +25,6 @@ class WowApis:
         key_file.close()
 
 
-    # Average item level
     def item_level(self, character, server):
         """
         Accesses the Battle.net API to get a character's level, race, class, and average item level
@@ -77,7 +74,6 @@ class WowApis:
         return output
 
 
-    # Mythic Plus info
     def mythic_plus(self, character, server):
         """
         Accesses the Raider.IO API to get a character's overall Mythic Plus score, highest completed Mythic Plus dungeon
@@ -125,10 +121,9 @@ class WowApis:
         return output
 
 
-    # All WoW API info
     def all(self, character, server):
         """
-        Gathers information from both other WowApis functions
+        Gathers and formats information from item_level and mythic_plus
         """
 
         # Get the item_level() info
@@ -146,5 +141,34 @@ class WowApis:
 
             else:
                 output += "No Mythic Plus data"
+
+        return output
+
+
+    def affixes(self):
+        """
+        Accesses the Raider.IO API to get the current affixes and their details
+        """
+
+        # Web address
+        url = "https://raider.io/api/v1/mythic-plus/affixes?region=us"
+
+        # Make the request
+        r = requests.get(url)
+
+        output = ""
+
+        # If the request is successful
+        if r.status_code == 200:
+
+            # Retrieve the data
+            data = r.json()
+
+            for affix in data["affix_details"]:
+                output += "**%s**\n" % affix["name"]
+                output += "%s\n\n" % affix["description"]
+
+        else:
+            output = "API error"
 
         return output

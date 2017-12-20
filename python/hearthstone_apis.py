@@ -3,8 +3,6 @@ import requests
 
 class HearthstoneApis:
 
-    api_key = ""
-
 
     def __init__(self):
 
