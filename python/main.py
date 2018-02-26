@@ -58,6 +58,17 @@ async def on_message(message):
             fake_news_emoji = discord.Emoji(name="fakenews", id="377290554909917186", server=message.server)
             await client.add_reaction(message, fake_news_emoji)
 
+        # If someone says "Kel'Thuzad"
+        if "kel'thuzad" in message.content.lower():
+            msg = "*THE ARCHLICH OF NAXXRAMAS, ESTEEMED LICH LORD OF THE PLAGUELANDS, COMMANDER OF THE DREAD " \
+                  "NECROPOLIS, MASTER AND FOUNDER OF THE CULT OF THE DAMNED, FORMERLY OF THE COUNCIL OF THE SIX, " \
+                  "CREATOR OF THE ABOMINATION, CORRUPTOR OF THE SUNWELL, SUMMONER OF ARCHIMONDE THE DEFILER, " \
+                  "BETRAYER OF HUMANITY, FOUNDER AND FIRST DARKMASTER OF THE SCHOLOMANCE, SCHOOL OF DARK ARTS AND " \
+                  "NECROMANCY. CREATOR AND MASTER OF THE FOUR HORSEMEN. CORRUPTOR OF THE ASHBRINGER, HEARTSTONE " \
+                  "ENTHUSIAST AND CARING OWNER OF MR.BIGGLESWORTH THE CAT, THE MAJORDOMO TO THE LICH KING HIMSELF - " \
+                  "KEL'THUZAD!*"
+            await client.send_message(message.channel, msg)
+
         # If someone calls "/help"
         if message.content.startswith("/help"):
             await help(message)
