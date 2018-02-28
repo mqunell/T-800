@@ -187,8 +187,8 @@ async def purge(message):
 
 async def remind_me(message):
     """
-    Splits a message into ["/remindme", <minutes>, <message>]
-    After <minutes>, mention the author and post <message>
+    Splits a message into ["/remindme", <duration and segment>, <message>]
+    After <duration>, mention the author and post <message>
     Note: <message> could be multiple strings, so join() is used
     """
 
@@ -198,24 +198,41 @@ async def remind_me(message):
     # If valid number of args
     if len(command) >= 3:
 
-        # Attempt to parse <minutes>
-        minutes = parse_int(command[1])
+        # Formatted author and base confirmation message
+        author = "*{0.author.mention}".format(message)
+        confirmation = "I WILL REMIND YOU OF THAT IN "
 
-        # If valid number of <minutes>
-        if 1 <= minutes <= 60:
-            # Create the messages (*'s for Discord italics)
-            author = "*{0.author.mention}".format(message)
-            confirmation = author + (": I WILL REMIND YOU OF THAT IN %d MINUTE%s.*" % (minutes,
-                                                                                       "S" if minutes > 1 else ""))
-            reminder = author + (": \"%s\"*" % " ".join(command[2:]))
+        # Attempt to parse <duration>
+        duration = parse_int(command[1][:-1])
 
-            # Post the confirmation immediately, and the reminder later
-            await client.send_message(message.channel, confirmation)
-            await asyncio.sleep(minutes * 60)
-            await client.send_message(message.channel, reminder)
+        # Hours
+        if command[1][-1:] == 'h':
+
+            # Check [1, 24]
+            if 1 <= duration <= 24:
+                confirmation += "%d HOUR%s, %s*" % (duration, "S" if duration > 1 else "", author)
+                reminder = author + (": \"%s\"*" % " ".join(command[2:]))
+
+                await post_reminder(message.channel, confirmation, reminder, duration * 3600)
+
+            else:
+                error_msg = "Invalid <duration>; must be [1, 24] for hours"
+
+        # Minutes
+        elif command[1][-1:] == 'm':
+
+            # Check [1, 60]
+            if 1 <= duration <= 60:
+                confirmation += "%d MINUTE%s, %s*" % (duration, "S" if duration > 1 else "", author)
+                reminder = author + (": \"%s\"*" % " ".join(command[2:]))
+
+                await post_reminder(message.channel, confirmation, reminder, duration * 60)
+
+            else:
+                error_msg = "Invalid <duration>; must be [1, 60] for minutes"
 
         else:
-            error_msg = "Invalid <minutes>; must be [1, 60]"
+            error_msg = "Invalid time specifier; must be 'h' or 'm'"
 
     else:
         error_msg = "Invalid number of arguments"
@@ -223,6 +240,17 @@ async def remind_me(message):
     # Post an error message, if necessary
     if error_msg is not "":
         await client.send_message(message.channel, "Error: %s" % error_msg)
+
+
+async def post_reminder(channel, confirmation, reminder, duration):
+    """
+    Helper function for remind_me
+    Posts a confirmation immediately, and the actual reminder later
+    """
+
+    await client.send_message(channel, confirmation)
+    await asyncio.sleep(duration)
+    await client.send_message(channel, reminder)
 
 
 async def parse_wow(message, function):
