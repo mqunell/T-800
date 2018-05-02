@@ -28,8 +28,8 @@ General:
 |Command|Details|
 |---|---|
 |`/help`|Displays a list of commands in the server chat|
-|`/remindme <num_minutes> <message>`|Tags users with their message after the designated amount of time (currently 1-60 minutes)|
-|`/purge <num_messages>`|Attempts to remove <num_messages> messages from the server (admin only)
+|`/remindme <duration><m/h> <message>`|Tags users with their message after the designated amount of time (1-60m, or 1-24h)|
+|`/purge <num_messages>`|Attempts to remove the <num_messages> most recent messages from the server (admin only)
 
 <br/>
 World of Warcraft:
@@ -56,7 +56,7 @@ Hearthstone:
 
 ---
 
-![Image of example usage](https://i.imgur.com/x6xRxl0.png)
+![Image of example usage](https://i.imgur.com/OE5WyKn.png)
 
 <br/><br/>
 

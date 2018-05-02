@@ -111,7 +111,7 @@ async def help(message):
     msg = "*I AM A HIGHLY CAPABLE MACHINE. THESE ARE MY COMMANDS:*\n\n"
 
     msg += "Reminders\n```"
-    msg += "/remindme <minutes (1-60)> <message>\n"
+    msg += "/remindme <duration><m/h> <message>\n"
     msg += "```\n"
 
     msg += "World of Warcraft\n```"
@@ -199,7 +199,7 @@ async def remind_me(message):
     if len(command) >= 3:
 
         # Formatted author and base confirmation message
-        author = "*{0.author.mention}".format(message)
+        author = "{0.author.mention}".format(message)
         confirmation = "I WILL REMIND YOU OF THAT IN "
 
         # Attempt to parse <duration>
@@ -210,8 +210,8 @@ async def remind_me(message):
 
             # Check [1, 24]
             if 1 <= duration <= 24:
-                confirmation += "%d HOUR%s, %s*" % (duration, "S" if duration > 1 else "", author)
-                reminder = author + (": \"%s\"*" % " ".join(command[2:]))
+                confirmation += "%d HOUR%s, %s." % (duration, "S" if duration > 1 else "", author)
+                reminder = author + (": \"%s\"" % " ".join(command[2:]))
 
                 await post_reminder(message.channel, confirmation, reminder, duration * 3600)
 
@@ -223,8 +223,8 @@ async def remind_me(message):
 
             # Check [1, 60]
             if 1 <= duration <= 60:
-                confirmation += "%d MINUTE%s, %s*" % (duration, "S" if duration > 1 else "", author)
-                reminder = author + (": \"%s\"*" % " ".join(command[2:]))
+                confirmation += "%d MINUTE%s, %s." % (duration, "S" if duration > 1 else "", author)
+                reminder = author + (": \"%s\"" % " ".join(command[2:]))
 
                 await post_reminder(message.channel, confirmation, reminder, duration * 60)
 
@@ -248,9 +248,9 @@ async def post_reminder(channel, confirmation, reminder, duration):
     Posts a confirmation immediately, and the actual reminder later
     """
 
-    await client.send_message(channel, confirmation)
+    await client.send_message(channel, "*" + confirmation + "*")
     await asyncio.sleep(duration)
-    await client.send_message(channel, reminder)
+    await client.send_message(channel, "*" + reminder + "*")
 
 
 async def parse_wow(message, function):
