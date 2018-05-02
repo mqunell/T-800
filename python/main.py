@@ -1,6 +1,8 @@
 import discord
 import asyncio
 import weekday_timers
+import xml.etree.ElementTree as ET
+
 from weekday import Weekday
 from wow_apis import WowApis
 from hearthstone_apis import HearthstoneApis
@@ -8,6 +10,12 @@ from hearthstone_apis import HearthstoneApis
 
 # Create the bot client
 client = discord.Client()
+
+# Parse the XML file
+root = ET.parse("../long_strings.xml").getroot()
+long_strings = {}
+for element in root:
+    long_strings[element.attrib["title"]] = element.text
 
 # Create the API objects
 wow = WowApis()
@@ -24,9 +32,8 @@ async def on_ready():
     print("----------------------------------------")
 
     # Get the "bot_testing" chat channel id
-    id_file = open("../secret/channel_id", "r")
-    channel_id = id_file.read().strip()
-    id_file.close()
+    with open("../secret/channel_id", "r") as id_file:
+        channel_id = id_file.read().strip()
 
     # Post a message when the bot comes online
     msg = "*T-800 ONLINE. YOUR CLOTHES, GIVE THEM TO ME. NOW.*"
@@ -60,18 +67,11 @@ async def on_message(message):
 
         # If someone says "Kel'Thuzad"
         if "kel'thuzad" in message.content.lower():
-            msg = "*THE ARCHLICH OF NAXXRAMAS, ESTEEMED LICH LORD OF THE PLAGUELANDS, COMMANDER OF THE DREAD " \
-                  "NECROPOLIS, MASTER AND FOUNDER OF THE CULT OF THE DAMNED, FORMERLY OF THE COUNCIL OF THE SIX, " \
-                  "CREATOR OF THE ABOMINATION, CORRUPTOR OF THE SUNWELL, SUMMONER OF ARCHIMONDE THE DEFILER, " \
-                  "BETRAYER OF HUMANITY, FOUNDER AND FIRST DARKMASTER OF THE SCHOLOMANCE, SCHOOL OF DARK ARTS AND " \
-                  "NECROMANCY. CREATOR AND MASTER OF THE FOUR HORSEMEN. CORRUPTOR OF THE ASHBRINGER, HEARTSTONE " \
-                  "ENTHUSIAST AND CARING OWNER OF MR.BIGGLESWORTH THE CAT, THE MAJORDOMO TO THE LICH KING HIMSELF - " \
-                  "KEL'THUZAD!*"
-            await client.send_message(message.channel, msg)
+            await client.send_message(message.channel, long_strings["kel'thuzad"])
 
         # If someone calls "/help"
         if message.content.startswith("/help"):
-            await help(message)
+            await client.send_message(message.channel, long_strings["help"])
 
         # If someone calls "/purge"
         if message.content.startswith("/purge"):
@@ -101,33 +101,6 @@ async def on_message(message):
         # If someone calls "/card" or "/hs"
         if message.content.startswith("/card") or message.content.startswith("/hs"):
             await hearthstone_card(message)
-
-
-async def help(message):
-    """
-    Writes what the bot can do
-    """
-
-    msg = "*I AM A HIGHLY CAPABLE MACHINE. THESE ARE MY COMMANDS:*\n\n"
-
-    msg += "Reminders\n```"
-    msg += "/remindme <duration><m/h> <message>\n"
-    msg += "```\n"
-
-    msg += "World of Warcraft\n```"
-    msg += "/ilevel <character_name> <server>    (/ilvl ...)\n"
-    msg += "/mplus  <character_name> <server>\n"
-    msg += "/wow    <character_name> <server>\n"
-    msg += "/affixes\n"
-    msg += "```\n"
-
-    msg += "Hearthstone\n```"
-    msg += "/card <card_name>    (/hs ...)\n"
-    msg += "```\n"
-
-    msg += "\n*MORE INFORMATION: <https://github.com/mqunell/T-800/blob/master/README.md>*"
-
-    await client.send_message(message.channel, msg)
 
 
 async def post_wednesday():
@@ -306,8 +279,7 @@ def parse_int(str_input):
 
 
 # Get the token and run the bot
-token_file = open("../secret/discord_token", "r")
-discord_token = token_file.read().strip()
-token_file.close()
+with open ("../secret/discord_token", "r") as token_file:
+    discord_token = token_file.read().strip()
 
 client.run(discord_token)
