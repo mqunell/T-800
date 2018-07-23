@@ -81,6 +81,10 @@ async def on_message(message):
         if message.content.startswith("/remindme"):
             await remind_me(message)
 
+        # If someone calls "/color"
+        if message.content.startswith("/color"):
+            await color(message)
+
         # If someone calls "/ilevel" or "/ilvl"
         if message.content.startswith("/ilevel") or message.content.startswith("/ilvl"):
             await parse_wow(message, wow.item_level)
@@ -224,6 +228,43 @@ async def post_reminder(channel, confirmation, reminder, duration):
     await client.send_message(channel, "*" + confirmation + "*")
     await asyncio.sleep(duration)
     await client.send_message(channel, "*" + reminder + "*")
+
+
+async def color(message):
+    """
+    Splits a message into ["/color", <color>]
+    Assigns the user a role, which gives them the specified color
+    """
+
+    command = message.content.split(" ")
+
+    # Colors to choose from
+    valid_colors = ["blue", "green", "orange", "purple", "red", "teal", "white", "yellow"]
+
+    # Role IDs for the colors
+    color_ids = ["459132667498332163", "459132517845434378", "459132844497960971", "459132711039401984",
+                 "459132750230716437", "459131976885075999", "459892614129254400", "459132789640396810"]
+
+    # If valid number of args
+    if len(command) == 2:
+
+        # If the second arg is a valid color
+        if command[1] in valid_colors:
+
+            # The user's non-color roles
+            user_roles = [role for role in message.author.roles if role.id not in color_ids]
+
+            # Add the chosen color's role to the list
+            user_roles.append(discord.utils.get(message.author.server.roles, name=command[1]))
+
+            # Set the new roles. Note: replace_roles has to be used when removing/adding, and the * unpacks the list
+            await client.replace_roles(message.author, *user_roles)
+
+        else:
+            await client.send_message(message.channel, "Error: Invalid color")
+
+    else:
+        await client.send_message(message.channel, "Error: Invalid number of arguments")
 
 
 async def parse_wow(message, function):

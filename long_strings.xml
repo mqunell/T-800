@@ -8,6 +8,11 @@ Reminders
 /remindme &lt;duration&gt;&lt;m/h&gt; &lt;message&gt;
 ```
 
+Colors: Blue, green, orange, purple, red, teal, white, yellow
+```
+/color &lt;color&gt;
+```
+
 World of Warcraft
 ```
 /ilevel &lt;character_name&gt; &lt;server&gt;    (/ilvl ...)
@@ -21,6 +26,6 @@ Hearthstone
 /card &lt;card_name&gt;    (/hs ...)
 ```
 
-*MORE INFORMATION: &lt;https://github.com/mqunell/T-800/blob/master/README.md&gt;*
+*EXAMPLES AND MORE INFORMATION: &lt;https://github.com/mqunell/T-800/blob/master/README.md&gt;*
     </text>
 </data>

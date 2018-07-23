@@ -29,6 +29,7 @@ General:
 |---|---|
 |`/help`|Displays a list of commands in the server chat|
 |`/remindme <duration><m/h> <message>`|Tags users with their message after the designated amount of time (1-60m, or 1-24h)|
+|`/color <color>`|Sets the user's name color|
 |`/purge <num_messages>`|Attempts to remove the <num_messages> most recent messages from the server (admin only)
 
 <br/>
