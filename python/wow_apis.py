@@ -5,10 +5,12 @@ class WowApis:
 
     # Dictionaries for parsing in item_level()
     wow_races = {1: "Human", 2: "Orc", 3: "Dwarf", 4: "Night Elf", 5: "Undead", 6: "Tauren", 7: "Gnome", 8: "Troll",
-                 9: "Goblin", 10: "Blood Elf", 11: "Draenei", 22: "Worgen", 25: "A. Panda", 26: "H. Panda"}
+                 9: "Goblin", 10: "Blood Elf", 11: "Draenei", 22: "Worgen", 25: "A. Panda", 26: "H. Panda",
+                 27: "Nightborne", 28: "Highmountain Tauren", 29: "Void Elf", 30: "Lightforged Draenei",
+                 34: "Dark Iron Dwarf", 36: "Mag'har Orc"}
 
-    wow_classes = {1: "Warrior", 2: "Paladin", 3: "Hunter", 4: "Rogue", 5: "Priest", 6: "Death Knight",
-                   7: "Shaman", 8: "Mage", 9: "Warlock", 10: "Monk", 11: "Druid", 12: "Demon Hunter"}
+    wow_classes = {1: "Warrior", 2: "Paladin", 3: "Hunter", 4: "Rogue", 5: "Priest", 6: "Death Knight", 7: "Shaman",
+                   8: "Mage", 9: "Warlock", 10: "Monk", 11: "Druid", 12: "Demon Hunter"}
 
     # Final output for item_level()
     item_level_invalid = "Invalid character name and/or server"
