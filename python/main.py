@@ -28,7 +28,7 @@ async def on_ready():
     When the bot signs in
     """
 
-    print("%s (ID: %s) logged in" % (client.user.name, client.user.id))
+    print(f"{client.user.name} (ID: {client.user.id}) logged in")
     print("----------------------------------------")
 
     # Get the "bot_testing" chat channel id
@@ -145,7 +145,9 @@ async def purge(message):
 
                     # Post a results message
                     num_removed = len(removed_messages) - 1
-                    results_message = "*%d MESSAGE%s REMOVED.*" % (num_removed, "S" if num_removed > 1 else "")
+                    plural = "S" if num_removed > 1 else ""
+                    results_message = f"*{num_removed} MESSAGE{plural} REMOVED.*"
+
                     await client.send_message(message.channel, results_message)
 
                 except:
@@ -159,7 +161,7 @@ async def purge(message):
 
         # Post an error message, if necessary
         if error_msg is not "":
-            await client.send_message(message.channel, "Error: %s" % error_msg)
+            await client.send_message(message.channel, f"Error: {error_msg}")
 
 
 async def remind_me(message):
@@ -187,8 +189,11 @@ async def remind_me(message):
 
             # Check [1, 24]
             if 1 <= duration <= 24:
-                confirmation += "%d HOUR%s, %s." % (duration, "S" if duration > 1 else "", author)
-                reminder = author + (": \"%s\"" % " ".join(command[2:]))
+                plural = "S" if duration > 1 else ""
+                confirmation += f"{duration} HOUR{plural}, {author}."
+
+                reminder_msg = " ".join(command[2:])
+                reminder = author + f": \"{reminder_msg}\""
 
                 await post_reminder(message.channel, confirmation, reminder, duration * 3600)
 
@@ -200,8 +205,11 @@ async def remind_me(message):
 
             # Check [1, 60]
             if 1 <= duration <= 60:
-                confirmation += "%d MINUTE%s, %s." % (duration, "S" if duration > 1 else "", author)
-                reminder = author + (": \"%s\"" % " ".join(command[2:]))
+                plural = "S" if duration > 1 else ""
+                confirmation += f"{duration} MINUTE{plural}, {author}."
+
+                reminder_msg = " ".join(command[2:])
+                reminder = author + f": \"{reminder_msg}\""
 
                 await post_reminder(message.channel, confirmation, reminder, duration * 60)
 
@@ -216,7 +224,7 @@ async def remind_me(message):
 
     # Post an error message, if necessary
     if error_msg is not "":
-        await client.send_message(message.channel, "Error: %s" % error_msg)
+        await client.send_message(message.channel, f"Error: {error_msg}")
 
 
 async def post_reminder(channel, confirmation, reminder, duration):

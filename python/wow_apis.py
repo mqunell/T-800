@@ -34,8 +34,8 @@ class WowApis:
 
         # Web address
         fields = "items&"  # Change for different fields
-        url = "https://us.api.battle.net/wow/character/%s/%s?fields=%slocale=en_US&apikey=%s" \
-              % (server, character, fields, self.api_key)
+        url = f"https://us.api.battle.net/wow/character/{server}/{character}" \
+              f"?fields={fields}locale=en_US&apikey={self.api_key}"
 
         # Make the request
         r = requests.get(url)
@@ -66,9 +66,9 @@ class WowApis:
             server = server.replace("-", " ")
 
             # Output
-            output += "%s-%s\n" % (character.title(), server.title())
-            output += "%d %s %s\n" % (character_level, character_race, character_class)
-            output += "Average item level: %d" % character_ilevel
+            output += f"{character.title()}-{server.title()}\n"
+            output += f"{character_level} {character_race} {character_class}\n"
+            output += f"Average item level: {character_ilevel}"
 
         else:
             output += self.item_level_invalid
@@ -83,7 +83,7 @@ class WowApis:
         """
 
         # Web address
-        url = "https://raider.io/api/v1/characters/profile?region=us&realm=%s&name=%s" % (server, character)
+        url = f"https://raider.io/api/v1/characters/profile?region=us&realm={server}&name={character}"
         url += "&fields=mythic_plus_scores%2Cmythic_plus_weekly_highest_level_runs"
 
         # Make the request
@@ -109,13 +109,13 @@ class WowApis:
             # Attempt to find the highest completed in the last week
             highest = "-"
             if len(data["mythic_plus_weekly_highest_level_runs"]) > 0:
-                highest = "%s %d" % (data["mythic_plus_weekly_highest_level_runs"][0]["dungeon"],
-                                     data["mythic_plus_weekly_highest_level_runs"][0]["mythic_level"])
+                highest = f"{data['mythic_plus_weekly_highest_level_runs'][0]['dungeon']} " \
+                          f"{data['mythic_plus_weekly_highest_level_runs'][0]['mythic_level']}"
 
-            output += "%s-%s\n" % (character.title(), server.title())
-            output += "Overall Mythic Plus score: %s\n" % overall_score
-            output += "Highest Mythic Plus this week: %s\n" % highest
-            output += "Raider.IO profile: <%s>\n" % profile_url
+            output += f"{character.title()}-{server.title()}\n"
+            output += f"Overall Mythic Plus score: {overall_score}\n"
+            output += f"Highest Mythic Plus this week: {highest}\n"
+            output += f"Raider.IO profile: <{profile_url}>\n"
 
         else:
             output = self.mythic_plus_not_found
@@ -167,8 +167,8 @@ class WowApis:
             data = r.json()
 
             for affix in data["affix_details"]:
-                output += "**%s**\n" % affix["name"]
-                output += "%s\n\n" % affix["description"]
+                output += f"**{affix['name']}**\n"
+                output += f"{affix['description']}\n\n"
 
         else:
             output = "API error"

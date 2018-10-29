@@ -51,9 +51,9 @@ def time_until(input_weekday):
     num_seconds = (target_weekday - now).total_seconds()
 
     # Test output - prints the current day, next input_weekday, and number of days until then
-    print("Now: %s" % str(now))
+    print(f"Now: {now}")
     weekday_strings = {0: "Mon", 1: "Tues", 2: "Wed", 3: "Thurs", 4: "Fri", 5: "Sat", 6: "Sun"}
-    print("%s: %s" % (weekday_strings[target_weekday_num], str(target_weekday)))
-    print("Approx. days until %s: %f" % (weekday_strings[target_weekday_num], (num_seconds / 60.0 / 60.0 / 24.0)))
+    print(f"{weekday_strings[target_weekday_num]}: {target_weekday}")
+    print(f"Approx. days until {weekday_strings[target_weekday_num]}: {num_seconds / 60.0 / 60.0 / 24.0}")
 
     return num_seconds

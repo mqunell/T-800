@@ -16,7 +16,7 @@ class HearthstoneApis:
     def card(self, card):
 
         # Web address
-        url = "https://omgvamp-hearthstone-v1.p.mashape.com/cards/search/%s" % card
+        url = f"https://omgvamp-hearthstone-v1.p.mashape.com/cards/search/{card}"
 
         # Create a request, attach the key
         request = requests.Session()
@@ -26,9 +26,8 @@ class HearthstoneApis:
         data = request.get(url).json()
 
         # Final output if data contains > 0 cards, but none of them have images to display
-        output = "%d card%s found, but no image%s to display" % (len(data),
-                                                                 "" if len(data) > 1 else "s",
-                                                                 "" if len(data) > 1 else "s")
+        plural = "" if len(data) > 1 else "s"
+        output = f"{len(data)} card{plural} found, but no image{plural} to display"
 
         # Check its validity - "error" key is only in invalid data
         if "error" not in data:
@@ -41,7 +40,7 @@ class HearthstoneApis:
                         break
 
                     else:
-                        output = "Did not find a collectible card, but found this:\n%s" % d["img"]
+                        output = f"Did not find a collectible card, but found this:\n{d['img']}"
 
         else:
 
