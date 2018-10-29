@@ -177,25 +177,25 @@ async def remind_me(message):
     # If valid number of args
     if len(command) >= 3:
 
-        # Formatted author and base confirmation message
+        # Formatted author
         author = "{0.author.mention}".format(message)
-        confirmation = "I WILL REMIND YOU OF THAT IN "
 
-        # Attempt to parse <duration>
+        # Attempt to parse <duration> (-1 if NaN)
         duration = parse_int(command[1][:-1])
+        plural = "S" if duration > 1 else ""
+
+        # Confirmation message with %s placeholder for "HOUR" or "MINUTE"
+        confirmation = f"*I WILL REMIND YOU OF THAT IN {duration} %s{plural}, {author}.*"
+
+        # Reminder message
+        reminder = f"*{author}: \"{' '.join(command[2:])}\"*"
 
         # Hours
         if command[1][-1:] == 'h':
 
             # Check [1, 24]
             if 1 <= duration <= 24:
-                plural = "S" if duration > 1 else ""
-                confirmation += f"{duration} HOUR{plural}, {author}."
-
-                reminder_msg = " ".join(command[2:])
-                reminder = author + f": \"{reminder_msg}\""
-
-                await post_reminder(message.channel, confirmation, reminder, duration * 3600)
+                await post_reminder(message.channel, confirmation % "HOUR", reminder, duration * 3600)
 
             else:
                 error_msg = "Invalid <duration>; must be [1, 24] for hours"
@@ -205,13 +205,7 @@ async def remind_me(message):
 
             # Check [1, 60]
             if 1 <= duration <= 60:
-                plural = "S" if duration > 1 else ""
-                confirmation += f"{duration} MINUTE{plural}, {author}."
-
-                reminder_msg = " ".join(command[2:])
-                reminder = author + f": \"{reminder_msg}\""
-
-                await post_reminder(message.channel, confirmation, reminder, duration * 60)
+                await post_reminder(message.channel, confirmation % "MINUTE", reminder, duration * 60)
 
             else:
                 error_msg = "Invalid <duration>; must be [1, 60] for minutes"
@@ -233,9 +227,9 @@ async def post_reminder(channel, confirmation, reminder, duration):
     Posts a confirmation immediately, and the actual reminder later
     """
 
-    await client.send_message(channel, "*" + confirmation + "*")
+    await client.send_message(channel, confirmation)
     await asyncio.sleep(duration)
-    await client.send_message(channel, "*" + reminder + "*")
+    await client.send_message(channel, reminder)
 
 
 async def color(message):
