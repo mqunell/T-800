@@ -1,21 +1,19 @@
-import discord
 import asyncio
+import discord
+import json
 import weekday_timers
-import xml.etree.ElementTree as ET
 
+from hearthstone_apis import HearthstoneApis
 from weekday import Weekday
 from wow_apis import WowApis
-from hearthstone_apis import HearthstoneApis
 
 
 # Create the bot client
 client = discord.Client()
 
-# Parse the XML file
-root = ET.parse("../long_strings.xml").getroot()
-long_strings = {}
-for element in root:
-    long_strings[element.attrib["title"]] = element.text
+# Parse the JSON file
+with open("../long_strings.json") as json_file:
+    long_strings = json.load(json_file)
 
 # Create the API objects
 wow = WowApis()
@@ -71,7 +69,7 @@ async def on_message(message):
 
         # If someone calls "/help"
         if message.content.startswith("/help"):
-            await client.send_message(message.channel, long_strings["help"])
+            await client.send_message(message.channel, "\n".join(long_strings["help"]))
 
         # If someone calls "/purge"
         if message.content.startswith("/purge"):
