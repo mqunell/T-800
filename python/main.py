@@ -67,41 +67,33 @@ async def on_message(message):
         if "kel'thuzad" in message.content.lower():
             await client.send_message(message.channel, long_strings["kel'thuzad"])
 
-        # If someone calls "/help"
+        # If someone calls /help, /purge, /remindme, /color, /ilevel, /ilvl, /mplus, /wow, /affixes, /card, or /hs
         if message.content.startswith("/help"):
             await client.send_message(message.channel, "\n".join(long_strings["help"]))
 
-        # If someone calls "/purge"
-        if message.content.startswith("/purge"):
+        elif message.content.startswith("/purge"):
             await purge(message)
 
-        # If someone calls "/remindme"
-        if message.content.startswith("/remindme"):
+        elif message.content.startswith("/remindme"):
             await remind_me(message)
 
-        # If someone calls "/color"
-        if message.content.startswith("/color"):
+        elif message.content.startswith("/color"):
             await color(message)
 
-        # If someone calls "/ilevel" or "/ilvl"
-        if message.content.startswith("/ilevel") or message.content.startswith("/ilvl"):
+        elif message.content.startswith("/ilevel") or message.content.startswith("/ilvl"):
             await parse_wow(message, wow.item_level)
 
-        # If someone calls "/mplus"
-        if message.content.startswith("/mplus"):
+        elif message.content.startswith("/mplus"):
             await parse_wow(message, wow.mythic_plus)
 
-        # If someone calls "/wow"
-        if message.content.startswith("/wow"):
+        elif message.content.startswith("/wow"):
             await parse_wow(message, wow.all)
 
-        # If someone calls "/affixes"
-        if message.content.startswith("/affixes"):
+        elif message.content.startswith("/affixes"):
             msg = wow.affixes()
             await client.send_message(message.channel, msg)
 
-        # If someone calls "/card" or "/hs"
-        if message.content.startswith("/card") or message.content.startswith("/hs"):
+        elif message.content.startswith("/card") or message.content.startswith("/hs"):
             await hearthstone_card(message)
 
 
