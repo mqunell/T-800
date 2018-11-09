@@ -21,10 +21,10 @@ class WowApis:
 
     def __init__(self):
 
-        # Parse the API key
-        key_file = open("../secret/wow_key", "r")
-        self.api_key = key_file.read().strip()
-        key_file.close()
+        # Parse the API token
+        token_file = open("../secret/wow_token", "r")
+        self.api_token = token_file.read().strip()
+        token_file.close()
 
 
     def item_level(self, character, server):
@@ -34,8 +34,8 @@ class WowApis:
 
         # Web address
         fields = "items&"  # Change for different fields
-        url = f"https://us.api.battle.net/wow/character/{server}/{character}" \
-              f"?fields={fields}locale=en_US&apikey={self.api_key}"
+        url = f"https://us.api.blizzard.com/wow/character/{server}/{character}" \
+              f"?fields={fields}locale=en_US&access_token={self.api_token}"
 
         # Make the request
         r = requests.get(url)
