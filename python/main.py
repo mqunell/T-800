@@ -113,11 +113,11 @@ async def purge(message):
     Remove up to <num_messages> most recent messages
     """
 
+    command = message.content.split(" ")
+    error_msg = ""
+
     # If the author is an administrator
     if message.channel.permissions_for(message.author).administrator:
-
-        command = message.content.split(" ")
-        error_msg = ""
 
         # If valid number of args
         if len(command) == 2:
@@ -149,9 +149,12 @@ async def purge(message):
         else:
             error_msg = "Invalid number of arguments"
 
-        # Post an error message, if necessary
-        if error_msg is not "":
-            await client.send_message(message.channel, f"Error: {error_msg}")
+    else:
+        error_msg = "Error: /purge requires administrator privileges"
+
+    # Post an error message, if necessary
+    if error_msg is not "":
+        await client.send_message(message.channel, f"Error: {error_msg}")
 
 
 async def remind_me(message):
@@ -229,6 +232,7 @@ async def color(message):
     """
 
     command = message.content.split(" ")
+    error_msg = ""
 
     # Colors to choose from
     valid_colors = ["blue", "green", "orange", "purple", "red", "teal", "white", "yellow"]
@@ -253,10 +257,14 @@ async def color(message):
             await client.replace_roles(message.author, *user_roles)
 
         else:
-            await client.send_message(message.channel, "Error: Invalid color")
+            error_msg = "Error: Invalid color"
 
     else:
-        await client.send_message(message.channel, "Error: Invalid number of arguments")
+        error_msg = "Error: Invalid number of arguments"
+
+    # Post an error message, if necessary
+    if error_msg is not "":
+        await client.send_message(message.channel, f"Error: {error_msg}")
 
 
 async def parse_wow(message, function):
