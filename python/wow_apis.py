@@ -99,9 +99,6 @@ class WowApis:
             # Retrieve the data
             data = r.json()
 
-            # Name
-            name = data["name"]
-
             # Profile URL
             profile_url = data["profile_url"]
 

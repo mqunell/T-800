@@ -3,9 +3,9 @@ import discord
 import json
 import weekday_timers
 
-from hearthstone_apis import HearthstoneApis
-from weekday import Weekday
-from wow_apis import WowApis
+from python.hearthstone_apis import HearthstoneApis
+from python.weekday import Weekday
+from python.wow_apis import WowApis
 
 
 # Create the bot client
@@ -292,7 +292,6 @@ async def hearthstone_card(message):
     """
 
     command = message.content.split(" ")
-    output = ""
 
     # If valid number of args
     if len(command) >= 2:
@@ -314,7 +313,7 @@ def parse_int(str_input):
     try:
         minutes = int(str_input)
     except:
-        None
+        pass
 
     return minutes
 
