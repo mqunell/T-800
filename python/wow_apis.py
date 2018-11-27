@@ -1,4 +1,3 @@
-import json
 import requests
 
 
@@ -20,14 +19,9 @@ class WowApis:
     mythic_plus_not_found = "Could not find character"
 
 
-    def __init__(self):
-
-        # Parse the client ID and secret
-        with open("../secret/wow_token.json") as token_file:
-            data = json.load(token_file)
-
-        self.client_id = data['client_id']
-        self.client_secret = data['client_secret']
+    def __init__(self, client_id, client_secret):
+        self.client_id = client_id
+        self.client_secret = self.client_secret = client_secret
 
 
     def item_level(self, character, server):

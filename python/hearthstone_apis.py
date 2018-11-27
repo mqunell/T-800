@@ -4,12 +4,8 @@ import requests
 class HearthstoneApis:
 
 
-    def __init__(self):
-
-        # Parse the API key
-        key_file = open("../secret/hearthstone_key", "r")
-        self.api_key = key_file.read().strip()
-        key_file.close()
+    def __init__(self, api_key):
+        self.api_key = api_key
 
 
     # Hearthstone card

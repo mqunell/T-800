@@ -11,13 +11,17 @@ from wow_apis import WowApis
 # Create the bot client
 client = discord.Client()
 
-# Parse the JSON file
-with open("../long_strings.json") as json_file:
-    long_strings = json.load(json_file)
+# Parse keys.json
+with open("../strings/keys.json") as keys_json_file:
+    keys = json.load(keys_json_file)
+
+# Parse long_strings.json
+with open("../strings/long_strings.json") as strings_json_file:
+    long_strings = json.load(strings_json_file)
 
 # Create the API objects
-wow = WowApis()
-hs = HearthstoneApis()
+wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
+hs = HearthstoneApis(keys['hearthstone']['key'])
 
 
 @client.event
@@ -29,13 +33,9 @@ async def on_ready():
     print(f"{client.user.name} (ID: {client.user.id}) logged in")
     print("----------------------------------------")
 
-    # Get the "bot_testing" chat channel id
-    with open("../secret/channel_id", "r") as id_file:
-        channel_id = id_file.read().strip()
-
     # Post a message when the bot comes online
     msg = "*T-800 ONLINE. YOUR CLOTHES, GIVE THEM TO ME. NOW.*"
-    await client.send_message(client.get_channel(channel_id), msg)
+    await client.send_message(client.get_channel(keys["discord"]["test_channel_id"]), msg)
 
     # Set the bot's "Playing" status
     await client.change_presence(game=discord.Game(name="Type /help"))
@@ -311,8 +311,4 @@ def parse_int(str_input):
     return minutes
 
 
-# Get the token and run the bot
-with open ("../secret/discord_token", "r") as token_file:
-    discord_token = token_file.read().strip()
-
-client.run(discord_token)
+client.run(keys["discord"]["token"])
