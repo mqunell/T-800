@@ -1,3 +1,4 @@
+import json
 import requests
 
 
@@ -21,10 +22,12 @@ class WowApis:
 
     def __init__(self):
 
-        # Parse the API token
-        token_file = open("../secret/wow_token", "r")
-        self.api_token = token_file.read().strip()
-        token_file.close()
+        # Parse the client ID and secret
+        with open("../secret/wow_token.json") as token_file:
+            data = json.load(token_file)
+
+        self.client_id = data['client_id']
+        self.client_secret = data['client_secret']
 
 
     def item_level(self, character, server):
@@ -32,10 +35,15 @@ class WowApis:
         Accesses the Battle.net API to get a character's level, race, class, and average item level
         """
 
+        # Get the OAuth token
+        auth = requests.get(f"https://us.battle.net/oauth/token?grant_type=client_credentials&"
+                            f"client_id={self.client_id}&client_secret={self.client_secret}")
+        auth_token = auth.json()['access_token']
+
         # Web address
         fields = "items&"  # Change for different fields
         url = f"https://us.api.blizzard.com/wow/character/{server}/{character}" \
-              f"?fields={fields}locale=en_US&access_token={self.api_token}"
+              f"?fields={fields}locale=en_US&access_token={auth_token}"
 
         # Make the request
         r = requests.get(url)
