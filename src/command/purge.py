@@ -1,4 +1,4 @@
-from python.parse_int import parse_int
+from src.helper.parse_int import parse_int
 
 
 async def purge(client, message):
@@ -37,7 +37,7 @@ async def purge(client, message):
                     await client.send_message(message.channel, results_message)
 
                 except:
-                    await client.send_message(message.channel, "Invalid <num_messages>; some may be too old")
+                    error_msg = "Invalid <num_messages>; some may be too old"
 
             else:
                 error_msg = "Invalid <num_messages>; must be [1, 100]"

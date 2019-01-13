@@ -3,15 +3,15 @@ import discord
 import json
 
 # Module imports
-from python.cmd_color import set_color
-from python.cmd_purge import purge
-from python.cmd_remind_me import remind_me
-from python.weekday_timers import time_until
+from src.command.set_color import set_color
+from src.command.purge import purge
+from src.command.remind_me import remind_me
+from src.weekday.weekday_timers import time_until
 
 # Class imports
-from python.hearthstone_apis import HearthstoneApis
-from python.weekday import Weekday
-from python.wow_apis import WowApis
+from src.api.hearthstone import HearthstoneApis
+from src.api.wow import WowApis
+from src.weekday.weekday import Weekday
 
 
 # Create the bot client
@@ -25,8 +25,13 @@ with open("../strings/long_strings.json") as strings_json_file:
     long_strings = json.load(strings_json_file)
 
 # Create the API objects
-wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
 hs = HearthstoneApis(keys['hearthstone']['key'])
+wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
+
+# Set the fake news emoji
+fake_news_emoji = discord.Emoji(name=keys["discord"]["fake_news_emoji_name"],
+                                id=keys["discord"]["fake_news_emoji_id"],
+                                server=discord.Server(id=keys["discord"]["authentic_news_server_id"]))
 
 
 @client.event
@@ -65,14 +70,13 @@ async def on_message(message):
 
         # If someone says "fake news"
         if "fake news" in message.content.lower():
-            fake_news_emoji = discord.Emoji(name="fakenews", id="377290554909917186", server=message.server)
             await client.add_reaction(message, fake_news_emoji)
 
         # If someone says "Kel'Thuzad"
         if "kel'thuzad" in message.content.lower():
             await client.send_message(message.channel, long_strings["kel'thuzad"])
 
-        # If someone calls /help, /purge, /remindme, /color, /ilevel, /ilvl, /mplus, /wow, /affixes, /card, or /hs
+        # Check for commands
         if message.content.startswith("/help"):
             await client.send_message(message.channel, "\n".join(long_strings["help"]))
 
@@ -103,10 +107,14 @@ async def on_message(message):
 
 
 async def post_wednesday():
+    """
+    Sleeps until Wednesday, posts a link, then repeats
+    """
+
     wait_time = time_until(Weekday.WEDNESDAY)
     await asyncio.sleep(wait_time)
 
-    await client.send_message(client.get_channel("373164195283337218"),
+    await client.send_message(client.get_channel(keys["discord"]["general_channel_id"]),
                               "http://i1.kym-cdn.com/photos/images/newsfeed/001/091/264/665.jpg")
 
     await post_wednesday()

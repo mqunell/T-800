@@ -1,6 +1,6 @@
 import asyncio
 
-from python.parse_int import parse_int
+from src.helper.parse_int import parse_int
 
 
 async def remind_me(client, message):
