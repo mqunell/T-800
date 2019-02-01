@@ -1,6 +1,6 @@
 # T-800 Discord Bot
 
-![Image of the T-800](https://vignette1.wikia.nocookie.net/terminator/images/d/d5/T1movie02-800.jpg/revision/latest?cb=20160322135926)
+![Image of example usage](https://i.imgur.com/OE5WyKn.png)
 
 
 <br/>
@@ -42,13 +42,6 @@ Hearthstone:
 |Command|Details|
 |---|---|
 |`/card <card name>` (also works as `/hs`)|Displays an image of the card|
-
-
-<br/>
-
-## Example Usage
-
-![Image of example usage](https://i.imgur.com/OE5WyKn.png)
 
 
 <br/>
