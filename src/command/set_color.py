@@ -35,10 +35,10 @@ async def set_color(client, message):
             await client.replace_roles(message.author, *user_roles)
 
         else:
-            error_msg = "Error: Invalid color"
+            error_msg = "Invalid color"
 
     else:
-        error_msg = "Error: Invalid number of arguments"
+        error_msg = "Invalid number of arguments"
 
     # Post an error message, if necessary
     if error_msg is not "":
