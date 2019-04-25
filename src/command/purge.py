@@ -6,7 +6,7 @@ async def purge(message):
     Splits a message into ["/purge", <num_messages>]
     Remove up to <num_messages> most recent messages
 
-    Params: Discord client, posted message
+    Params: Posted message
     """
 
     command = message.content.split(' ')

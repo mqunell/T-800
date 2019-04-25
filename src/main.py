@@ -19,10 +19,10 @@ from src.weekday.weekday import Weekday
 client = discord.Client()
 
 # Parse the JSON files
-with open("../strings/keys.json") as keys_json_file:
+with open('../strings/keys.json') as keys_json_file:
     keys = json.load(keys_json_file)
 
-with open("../strings/long_strings.json") as strings_json_file:
+with open('../strings/long_strings.json') as strings_json_file:
     long_strings = json.load(strings_json_file)
 
 # Create the API objects
@@ -76,13 +76,13 @@ async def on_message(message):
         if message.content.startswith('/help'):
             await message.channel.send('\n'.join(long_strings['help']))
 
-        elif message.content.startswith("/purge"):
+        elif message.content.startswith('/purge'):
             await purge(message)
 
-        '''
         elif message.content.startswith("/remindme"):
-            await remind_me(client, message)
+            await remind_me(message)
 
+        '''
         elif message.content.startswith("/color"):
             await set_color(client, message)
 
