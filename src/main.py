@@ -2,6 +2,7 @@ import asyncio
 import discord
 import json
 
+'''
 # Module imports
 from src.command.set_color import set_color
 from src.command.purge import purge
@@ -12,6 +13,7 @@ from src.weekday.weekday_timers import time_until
 from src.api.hearthstone import HearthstoneApis
 from src.api.wow import WowApis
 from src.weekday.weekday import Weekday
+'''
 
 
 # Create the bot client
@@ -25,13 +27,8 @@ with open("../strings/long_strings.json") as strings_json_file:
     long_strings = json.load(strings_json_file)
 
 # Create the API objects
-hs = HearthstoneApis(keys['hearthstone']['key'])
-wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
-
-# Set the fake news emoji
-fake_news_emoji = discord.Emoji(name=keys["discord"]["fake_news_emoji_name"],
-                                id=keys["discord"]["fake_news_emoji_id"],
-                                server=discord.Server(id=keys["discord"]["authentic_news_server_id"]))
+#hs = HearthstoneApis(keys['hearthstone']['key'])
+#wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
 
 
 @client.event
@@ -40,18 +37,18 @@ async def on_ready():
     When the bot signs in
     """
 
-    print(f"{client.user.name} (ID: {client.user.id}) logged in")
-    print("----------------------------------------")
+    print(f'{client.user.name} (ID: {client.user.id}) logged in')
+    print('----------------------------------------')
 
     # Post a message when the bot comes online
-    msg = "*T-800 ONLINE. YOUR CLOTHES, GIVE THEM TO ME. NOW.*"
-    await client.send_message(client.get_channel(keys["discord"]["test_channel_id"]), msg)
+    test_channel = client.get_channel(keys['discord']['test_channel_id'])
+    await test_channel.send('*T-800 ONLINE. YOUR CLOTHES, GIVE THEM TO ME. NOW.*')
 
     # Set the bot's "Playing" status
-    await client.change_presence(game=discord.Game(name="Type /help"))
+    await client.change_presence(activity=discord.Game('Type /help'))
 
     # Start the Wednesday "timer"
-    await post_wednesday()
+    #await post_wednesday()
 
 
 @client.event
@@ -65,21 +62,22 @@ async def on_message(message):
 
         # If someone tags the bot
         if client.user in message.mentions:
-            msg = "*TALK TO THE HAND, {0.author.mention}.*".format(message)
-            await client.send_message(message.channel, msg)
+            msg = '*TALK TO THE HAND, {0.author.mention}.*'.format(message)
+            await message.channel.send(msg)
 
         # If someone says "fake news"
-        if "fake news" in message.content.lower():
-            await client.add_reaction(message, fake_news_emoji)
+        if 'fake news' in message.content.lower():
+            await message.add_reaction(client.get_emoji(keys['discord']['fake_news_emoji_id']))
 
         # If someone says "Kel'Thuzad"
-        if "kel'thuzad" in message.content.lower():
-            await client.send_message(message.channel, long_strings["kel'thuzad"])
+        if 'kel\'thuzad' in message.content.lower():
+            await message.channel.send(long_strings['kel\'thuzad'])
 
         # Check for commands
-        if message.content.startswith("/help"):
-            await client.send_message(message.channel, "\n".join(long_strings["help"]))
+        if message.content.startswith('/help'):
+            await message.channel.send('\n'.join(long_strings['help']))
 
+        '''
         elif message.content.startswith("/purge"):
             await purge(client, message)
 
@@ -153,7 +151,7 @@ async def hearthstone_card(message):
         await client.send_message(message.channel, hs.card(" ".join(command[1:])))
 
     else:
-        await client.send_message(message.channel, "Error: Invalid number of arguments")
+        await client.send_message(message.channel, "Error: Invalid number of arguments")'''
 
 
-client.run(keys["discord"]["token"])
+client.run(keys['discord']['token'])
