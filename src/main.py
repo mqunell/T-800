@@ -2,7 +2,7 @@ import asyncio
 import discord
 import json
 
-'''
+
 # Module imports
 from src.command.set_color import set_color
 from src.command.purge import purge
@@ -13,7 +13,6 @@ from src.weekday.weekday_timers import time_until
 from src.api.hearthstone import HearthstoneApis
 from src.api.wow import WowApis
 from src.weekday.weekday import Weekday
-'''
 
 
 # Create the bot client
@@ -77,10 +76,10 @@ async def on_message(message):
         if message.content.startswith('/help'):
             await message.channel.send('\n'.join(long_strings['help']))
 
-        '''
         elif message.content.startswith("/purge"):
-            await purge(client, message)
+            await purge(message)
 
+        '''
         elif message.content.startswith("/remindme"):
             await remind_me(client, message)
 
