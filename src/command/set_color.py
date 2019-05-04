@@ -9,37 +9,40 @@ async def set_color(client, message):
     Params: Discord client, posted message
     """
 
-    command = message.content.split(" ")
-    error_msg = ""
+    command = message.content.split(' ')
+    error_msg = ''
 
-    # Colors to choose from
-    valid_colors = ["blue", "green", "orange", "purple", "red", "teal", "white", "yellow"]
-
-    # Role IDs for the colors
-    color_ids = ["459132667498332163", "459132517845434378", "459132844497960971", "459132711039401984",
-                 "459132750230716437", "459131976885075999", "459892614129254400", "459132789640396810"]
+    # Colors to choose from and their role IDs
+    color_roles = {'blue': 459132667498332163,
+                   'green': 459132517845434378,
+                   'orange': 459132844497960971,
+                   'purple': 459132711039401984,
+                   'red': 459132750230716437,
+                   'teal': 459131976885075999,
+                   'white': 459892614129254400,
+                   'yellow': 459132789640396810}
 
     # If valid number of args
     if len(command) == 2:
 
         # If the second arg is a valid color
-        if command[1] in valid_colors:
+        if command[1] in color_roles.keys():
 
             # The user's non-color roles
-            user_roles = [role for role in message.author.roles if role.id not in color_ids]
+            user_roles = [role for role in message.author.roles if role.id not in color_roles.values()]
 
             # Add the chosen color's role to the list
-            user_roles.append(discord.utils.get(message.author.server.roles, name=command[1]))
+            user_roles.append(discord.utils.get(message.author.guild.roles, name=command[1]))
 
-            # Set the new roles. Note: replace_roles has to be used when removing/adding, and the * unpacks the list
-            await client.replace_roles(message.author, *user_roles)
+            # Replace all existing roles with the new list
+            await message.author.edit(roles=user_roles)
 
         else:
-            error_msg = "Invalid color"
+            error_msg = 'Invalid color'
 
     else:
-        error_msg = "Invalid number of arguments"
+        error_msg = 'Invalid number of arguments'
 
     # Post an error message, if necessary
-    if error_msg is not "":
-        await client.send_message(message.channel, f"Error: {error_msg}")
+    if error_msg is not '':
+        await message.channel.send(f'Error: {error_msg}')

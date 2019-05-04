@@ -79,13 +79,13 @@ async def on_message(message):
         elif message.content.startswith('/purge'):
             await purge(message)
 
-        elif message.content.startswith("/remindme"):
+        elif message.content.startswith('/remindme'):
             await remind_me(message)
 
-        '''
-        elif message.content.startswith("/color"):
+        elif message.content.startswith('/color'):
             await set_color(client, message)
 
+        '''
         elif message.content.startswith("/ilevel") or message.content.startswith("/ilvl"):
             await parse_wow(message, wow.item_level)
 
