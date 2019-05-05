@@ -26,7 +26,7 @@ with open('../strings/long_strings.json') as strings_json_file:
     long_strings = json.load(strings_json_file)
 
 # Create the API objects
-#hs = HearthstoneApis(keys['hearthstone']['key'])
+hs = HearthstoneApis(keys['hearthstone']['key'])
 wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
 
 
@@ -97,11 +97,10 @@ async def on_message(message):
         elif message.content.startswith('/affixes'):
             await message.channel.send(wow.affixes())
 
-        '''
-        elif message.content.startswith("/card") or message.content.startswith("/hs"):
+        elif message.content.startswith('/card') or message.content.startswith('/hs'):
             await hearthstone_card(message)
 
-
+'''
 async def post_wednesday():
     """
     Sleeps until Wednesday, posts a link, then repeats
@@ -133,7 +132,7 @@ async def parse_wow(message, function):
     else:
         await message.channel.send('Error: Invalid number of arguments')
 
-'''
+
 async def hearthstone_card(message):
     """
     Splits a message into ["/card", <card>]
@@ -146,10 +145,10 @@ async def hearthstone_card(message):
     if len(command) >= 2:
 
         # Make the API call, which handles invalid input
-        await client.send_message(message.channel, hs.card(" ".join(command[1:])))
+        await message.channel.send(hs.card(' '.join(command[1:])))
 
     else:
-        await client.send_message(message.channel, "Error: Invalid number of arguments")'''
+        await message.channel.send('Error: Invalid number of arguments')
 
 
 client.run(keys['discord']['token'])
