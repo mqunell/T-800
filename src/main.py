@@ -47,7 +47,7 @@ async def on_ready():
     await client.change_presence(activity=discord.Game('Type /help'))
 
     # Start the Wednesday "timer"
-    #await post_wednesday()
+    await post_wednesday()
 
 
 @client.event
@@ -100,7 +100,7 @@ async def on_message(message):
         elif message.content.startswith('/card') or message.content.startswith('/hs'):
             await hearthstone_card(message)
 
-'''
+
 async def post_wednesday():
     """
     Sleeps until Wednesday, posts a link, then repeats
@@ -109,11 +109,11 @@ async def post_wednesday():
     wait_time = time_until(Weekday.WEDNESDAY)
     await asyncio.sleep(wait_time)
 
-    await client.send_message(client.get_channel(keys["discord"]["general_channel_id"]),
-                              "http://i1.kym-cdn.com/photos/images/newsfeed/001/091/264/665.jpg")
+    link = keys['discord']['wednesday_img']
+    await client.get_channel(keys['discord']['wednesday_channel_id']).send(link)
 
     await post_wednesday()
-'''
+
 
 async def parse_wow(message, function):
     """
