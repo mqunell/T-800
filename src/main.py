@@ -83,7 +83,7 @@ async def on_message(message):
             await remind_me(message)
 
         elif message.content.startswith('/color'):
-            await set_color(client, message)
+            await set_color(message, keys['discord']['color_roles'])
 
         '''
         elif message.content.startswith("/ilevel") or message.content.startswith("/ilvl"):
