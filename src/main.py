@@ -27,7 +27,7 @@ with open('../strings/long_strings.json') as strings_json_file:
 
 # Create the API objects
 #hs = HearthstoneApis(keys['hearthstone']['key'])
-#wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
+wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
 
 
 @client.event
@@ -85,20 +85,19 @@ async def on_message(message):
         elif message.content.startswith('/color'):
             await set_color(message, keys['discord']['color_roles'])
 
-        '''
-        elif message.content.startswith("/ilevel") or message.content.startswith("/ilvl"):
+        elif message.content.startswith('/ilevel') or message.content.startswith('/ilvl'):
             await parse_wow(message, wow.item_level)
 
-        elif message.content.startswith("/mplus"):
+        elif message.content.startswith('/mplus'):
             await parse_wow(message, wow.mythic_plus)
 
-        elif message.content.startswith("/wow"):
+        elif message.content.startswith('/wow'):
             await parse_wow(message, wow.all)
 
-        elif message.content.startswith("/affixes"):
-            msg = wow.affixes()
-            await client.send_message(message.channel, msg)
+        elif message.content.startswith('/affixes'):
+            await message.channel.send(wow.affixes())
 
+        '''
         elif message.content.startswith("/card") or message.content.startswith("/hs"):
             await hearthstone_card(message)
 
@@ -115,7 +114,7 @@ async def post_wednesday():
                               "http://i1.kym-cdn.com/photos/images/newsfeed/001/091/264/665.jpg")
 
     await post_wednesday()
-
+'''
 
 async def parse_wow(message, function):
     """
@@ -123,18 +122,18 @@ async def parse_wow(message, function):
     Calls the passed-in WowApis function and posts the results
     """
 
-    command = message.content.split(" ")
+    command = message.content.split(' ')
 
     # If valid number of args
     if len(command) == 3:
 
         # Make the API call, which handles invalid input
-        await client.send_message(message.channel, function(command[1], command[2]))
+        await message.channel.send(function(command[1], command[2]))
 
     else:
-        await client.send_message(message.channel, "Error: Invalid number of arguments")
+        await message.channel.send('Error: Invalid number of arguments')
 
-
+'''
 async def hearthstone_card(message):
     """
     Splits a message into ["/card", <card>]
