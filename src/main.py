@@ -105,6 +105,30 @@ async def on_message(message):
             await hearthstone_card(message)
 
 
+@client.event
+async def on_reaction_add(reaction, user):
+    await log_reaction(reaction, user, '+')
+
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    await log_reaction(reaction, user, '-')
+
+
+async def log_reaction(reaction, user, plus_minus):
+    """
+    Logs the user who added/reacted an emoji
+
+    :param reaction: The Reaction, which includes the original message's author/content and the reacted emoji
+    :param user: The user who added the Reaction
+    :param plus_minus: '+' for added or '-' for removed
+    """
+
+    log_channel = client.get_channel(keys['discord']['log_channel_id'])
+    await log_channel.send(f'{user} {plus_minus}*{reaction.emoji.name}*\n'
+                           f'`{reaction.message.author}: {reaction.message.content}`')
+
+
 async def post_wednesday():
     """
     Sleeps until Wednesday, posts a link, then repeats
