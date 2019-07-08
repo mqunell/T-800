@@ -125,8 +125,23 @@ async def log_reaction(reaction, user, plus_minus):
     """
 
     log_channel = client.get_channel(keys['discord']['log_channel_id'])
-    await log_channel.send(f'{user} {plus_minus}*{reaction.emoji.name}*\n'
-                           f'`{reaction.message.author}: {reaction.message.content}`')
+    await log_channel.send(f'{user} {plus_minus}`{reaction.emoji.name}` {reaction.message.author}: {reaction.message.content}')
+
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    log_channel = client.get_channel(keys['discord']['log_channel_id'])
+
+    if before.channel is None:
+        output = f'{member} connected to `{after.channel.name}`'
+
+    elif after.channel is None:
+        output = f'{member} disconnected from `{before.channel.name}`'
+
+    else:
+        output = f'{member} moved from `{before.channel.name}` to `{after.channel.name}`'
+
+    await log_channel.send(output)
 
 
 async def post_wednesday():
