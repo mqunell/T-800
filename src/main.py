@@ -106,6 +106,12 @@ async def on_message(message):
 
 
 @client.event
+async def on_message_delete(message):
+    log_channel = client.get_channel(keys['discord']['log_channel_id'])
+    await log_channel.send(f'Someone deleted `{message.author}: {message.content}`')
+
+
+@client.event
 async def on_reaction_add(reaction, user):
     await log_reaction(reaction, user, ('added', 'to'))
 
