@@ -107,25 +107,25 @@ async def on_message(message):
 
 @client.event
 async def on_reaction_add(reaction, user):
-    await log_reaction(reaction, user, '+')
+    await log_reaction(reaction, user, ('added', 'to'))
 
 
 @client.event
 async def on_reaction_remove(reaction, user):
-    await log_reaction(reaction, user, '-')
+    await log_reaction(reaction, user, ('removed', 'from'))
 
 
-async def log_reaction(reaction, user, plus_minus):
+async def log_reaction(reaction, user, added_removed):
     """
-    Logs the user who added/reacted an emoji
-
-    :param reaction: The Reaction, which includes the original message's author/content and the reacted emoji
-    :param user: The user who added the Reaction
-    :param plus_minus: '+' for added or '-' for removed
+    Logs the added/removed reaction
     """
 
     log_channel = client.get_channel(keys['discord']['log_channel_id'])
-    await log_channel.send(f'{user} {plus_minus}`{reaction.emoji.name}` {reaction.message.author}: {reaction.message.content}')
+
+    # Parse the actual emoji (if default) or emoji name (if custom)
+    emoji = reaction.emoji if isinstance(reaction.emoji, str) else reaction.emoji.name
+
+    await log_channel.send(f'{user} {added_removed[0]} `{emoji}` {added_removed[1]} `{reaction.message.author}: {reaction.message.content}`')
 
 
 @client.event
