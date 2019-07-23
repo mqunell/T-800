@@ -29,7 +29,7 @@ async def remind_me(message):
         confirmation = f'*I WILL REMIND YOU OF THAT IN {duration} %s{plural}, {author}.*'
 
         # Reminder message
-        reminder = f'*{author}: {" ".join(command[2:])}*'
+        reminder = f'*{author}: "{" ".join(command[2:])}"*'
 
         # Hours
         if command[1][-1:] == 'h':
