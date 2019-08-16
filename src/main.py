@@ -16,6 +16,7 @@ from src.weekday.weekday_timers import time_until
 # Class imports
 from src.api.hearthstone import HearthstoneApis
 from src.api.wow import WowApis
+from src.logger import Logger
 from src.weekday.weekday import Weekday
 
 
@@ -32,6 +33,7 @@ with open('../strings/long_strings.json') as strings_json_file:
 # Create the API objects
 hs = HearthstoneApis(keys['hearthstone']['key'])
 wow = WowApis(keys['wow']['client_id'], keys['wow']['client_secret'])
+logger = Logger()
 
 
 @client.event
@@ -119,25 +121,16 @@ async def on_message_edit(before, after):
 
 @client.event
 async def on_reaction_add(reaction, user):
-    await log_reaction(reaction, user, ('added', 'to'))
+    reaction_log.add(reaction, user)
 
 
 @client.event
 async def on_reaction_remove(reaction, user):
-    await log_reaction(reaction, user, ('removed', 'from'))
+    result = reaction_log.remove(reaction, user)
 
-
-async def log_reaction(reaction, user, added_removed):
-    """
-    Logs the added/removed reaction
-    """
-
-    log_channel = client.get_channel(keys['discord']['log_channel_id'])
-
-    # Parse the actual emoji (if default) or emoji name (if custom)
-    emoji = reaction.emoji if isinstance(reaction.emoji, str) else reaction.emoji.name
-
-    await log_channel.send(f'{user} {added_removed[0]} `{emoji}` {added_removed[1]} `{reaction.message.author}: {reaction.message.content}`')
+    if result:
+        log_channel = client.get_channel(keys['discord']['log_channel_id'])
+        await log_channel.send(result)
 
 
 @client.event
