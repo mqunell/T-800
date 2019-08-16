@@ -138,7 +138,7 @@ async def on_voice_state_update(member, before, after):
     log_channel = client.get_channel(keys['discord']['log_channel_id'])
 
     # Only check if the channel was changed (ignores VoiceState changes like muting/unmuting)
-    if before.channel.name != after.channel.name:
+    if before.channel != after.channel:
 
         # When someone disconnects from a channel
         if before.channel is not None:
