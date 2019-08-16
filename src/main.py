@@ -106,6 +106,9 @@ async def on_message(message):
         elif message.content.startswith('/card') or message.content.startswith('/hs'):
             await hearthstone_card(message)
 
+        elif message.content.startswith('/test'):
+            logger.test()
+
 
 @client.event
 async def on_message_delete(message):
@@ -121,12 +124,12 @@ async def on_message_edit(before, after):
 
 @client.event
 async def on_reaction_add(reaction, user):
-    reaction_log.add(reaction, user)
+    logger.add_reaction(reaction, user)
 
 
 @client.event
 async def on_reaction_remove(reaction, user):
-    result = reaction_log.remove(reaction, user)
+    result = logger.remove_reaction(reaction, user)
 
     if result:
         log_channel = client.get_channel(keys['discord']['log_channel_id'])
@@ -135,6 +138,23 @@ async def on_reaction_remove(reaction, user):
 
 @client.event
 async def on_voice_state_update(member, before, after):
+    log_channel = client.get_channel(keys['discord']['log_channel_id'])
+
+    # Only check if the channel was changed (ignores VoiceState changes like muting/unmuting)
+    if before.channel.name != after.channel.name:
+
+        # When someone leaves a channel
+        if before.channel is not None:
+            result = logger.leave_voice(member, before.channel)
+            if result:
+                await log_channel.send(result)
+
+        # When someone joins a channel
+        if after.channel is not None:
+            logger.join_voice(member, after.channel)
+
+
+    '''
     log_channel = client.get_channel(keys['discord']['log_channel_id'])
 
     output = ''
@@ -150,6 +170,7 @@ async def on_voice_state_update(member, before, after):
 
     if output != '':
         await log_channel.send(output)
+    '''
 
 
 async def post_wednesday():
