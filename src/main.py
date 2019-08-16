@@ -59,7 +59,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     """
-    When messages are posted
+    When a message is posted
     """
 
     # Prevent the bot from responding to itself
@@ -106,9 +106,6 @@ async def on_message(message):
         elif message.content.startswith('/card') or message.content.startswith('/hs'):
             await hearthstone_card(message)
 
-        elif message.content.startswith('/test'):
-            logger.test()
-
 
 @client.event
 async def on_message_delete(message):
@@ -124,12 +121,12 @@ async def on_message_edit(before, after):
 
 @client.event
 async def on_reaction_add(reaction, user):
-    logger.add_reaction(reaction, user)
+    logger.add_reaction(user, reaction)
 
 
 @client.event
 async def on_reaction_remove(reaction, user):
-    result = logger.remove_reaction(reaction, user)
+    result = logger.remove_reaction(user, reaction)
 
     if result:
         log_channel = client.get_channel(keys['discord']['log_channel_id'])
@@ -143,34 +140,15 @@ async def on_voice_state_update(member, before, after):
     # Only check if the channel was changed (ignores VoiceState changes like muting/unmuting)
     if before.channel.name != after.channel.name:
 
-        # When someone leaves a channel
+        # When someone disconnects from a channel
         if before.channel is not None:
-            result = logger.leave_voice(member, before.channel)
+            result = logger.disconnect_voice(member, before.channel)
             if result:
                 await log_channel.send(result)
 
-        # When someone joins a channel
+        # When someone connects to a channel
         if after.channel is not None:
-            logger.join_voice(member, after.channel)
-
-
-    '''
-    log_channel = client.get_channel(keys['discord']['log_channel_id'])
-
-    output = ''
-
-    if before.channel is None:
-        output = f'{member} connected to `{after.channel.name}`'
-
-    elif after.channel is None:
-        output = f'{member} disconnected from `{before.channel.name}`'
-
-    elif before.channel.name != after.channel.name:
-        output = f'{member} moved from `{before.channel.name}` to `{after.channel.name}`'
-
-    if output != '':
-        await log_channel.send(output)
-    '''
+            logger.connect_voice(member, after.channel)
 
 
 async def post_wednesday():
