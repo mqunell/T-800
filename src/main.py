@@ -116,7 +116,8 @@ async def on_message_delete(message):
 @client.event
 async def on_message_edit(before, after):
     log_channel = client.get_channel(keys['discord']['log_channel_id'])
-    await log_channel.send(f'{before.author} edited `{before.content}` to `{after.content}`')
+    if before.content != after.content:
+        await log_channel.send(f'{before.author} edited `{before.content}` to `{after.content}`')
 
 
 @client.event
